@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+
+  "name": "Tongji Helper",
+  "description": "超威蓝猫制作的同济助手浏览器插件，目前可在出现统一身份认证网页时自动登录，更多功能敬请期待！",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  
+  "icons": {
+  	"48": "icon48.png",
+   	"128": "icon.png" },
+  
+  "content_scripts": [
+    {
+      "matches": ["*://*.tongji.edu.cn/*"],
+      "js": ["js/jquery-3.1.1.min.js", "js/tjlogin.js"],
+      "all_frames": true
+    }
+  ],
+  
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+  
+  "permissions": [
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "*://*.tongji.edu.cn/"
+  ]
+}
