@@ -5,5 +5,5 @@ chrome.webRequest.onBeforeRequest.addListener(
         
 chrome.webRequest.onBeforeRequest.addListener(
         function(details) { return {redirectUrl: "http://4m3.tongji.edu.cn/eams/samlCheck"}; },
-        {urls: ["http://4m3.tongji.edu.cn/eams/login.action"]},
+        {urls: ["http://4m3.tongji.edu.cn/eams/login.action*"]},
         ["blocking"]);

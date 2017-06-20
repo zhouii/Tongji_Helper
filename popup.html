@@ -41,19 +41,39 @@
 				background: -moz-linear-gradient(top,#1a71a8,#1976b1);
 				background: linear-gradient(top,#1a71a8,#1976b1);
 			}
+			
+			.tgl{display:none}
+			.tgl,.tgl *,.tgl :after,.tgl :before,.tgl+.tgl-btn,.tgl:after,.tgl:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin:5px}
+			.tgl ::-moz-selection,.tgl :after::-moz-selection,.tgl :before::-moz-selection,.tgl+.tgl-btn::-moz-selection,.tgl::-moz-selection,.tgl:after::-moz-selection,.tgl:before::-moz-selection{background:0 0}
+			.tgl ::selection,.tgl :after::selection,.tgl :before::selection,.tgl+.tgl-btn::selection,.tgl::selection,.tgl:after::selection,.tgl:before::selection{background:0 0}
+			.tgl+.tgl-btn{outline:0;display:block;width:4em;height:2em;position:relative;cursor:pointer}
+			.tgl+.tgl-btn:after,.tgl+.tgl-btn:before{position:relative;display:block;content:"";width:50%;height:100%}
+			.tgl+.tgl-btn:after{left:0}
+			.tgl+.tgl-btn:before{display:none}
+			.tgl:checked+.tgl-btn:after{left:50%}
+			.tgl-input+.tgl-btn{background:#fbfbfb;border-radius:2em;padding:2px;-webkit-transition:all .4s ease;transition:all .4s ease;border:1px solid #e8eae9}
+			.tgl-input+.tgl-btn:after{border-radius:2em;background:#fbfbfb;-webkit-transition:left .3s cubic-bezier(.175,.885,.32,1.275),padding .3s ease,margin .3s ease;transition:left .3s cubic-bezier(.175,.885,.32,1.275),padding .3s ease,margin .3s ease;-webkit-box-shadow:0 0 0 1px rgba(0,0,0,.1),0 4px 0 rgba(0,0,0,.08);box-shadow:0 0 0 1px rgba(0,0,0,.1),0 4px 0 rgba(0,0,0,.08)}
+			.tgl-input+.tgl-btn:active{-webkit-box-shadow:inset 0 0 0 2em #e8eae9;box-shadow:inset 0 0 0 2em #e8eae9}
+			.tgl-input+.tgl-btn:active:after{padding-right:.8em}
+			.tgl-input:checked+.tgl-btn{background:#86d993}
+			.tgl-input:checked+.tgl-btn:active{-webkit-box-shadow:none;box-shadow:none}
+			.tgl-input:checked+.tgl-btn:active:after{margin-left:-.8em}
     </style>
   </head>
   <body>
-    <div style="width: 200px; padding: 10px; ">
+    <div style="width: 250px; padding: 10px; ">
     	<div align="center">
     		<img src="icon.png" height="80px"/>
     		<h2>Tongji Helper</h2>
     	</div>
-    	<p style="color: rgb(115, 119, 122); font-size: 13px;">超威蓝猫制作的同济助手浏览器插件，目前可在出现统一身份认证网页时自动登录，更多功能敬请期待！</p>
-    	<p>
-				<label>启用自动登录
-				<input type="checkbox" id="enable" /></label>
-			</p>
+    	<p style="color: rgb(115, 119, 122); font-size: 13px;">超威蓝猫制作的同济助手浏览器插件，不仅能自动登录，还有更多功能自己探索去→_→</p>
+    	<div style="display: flex;">
+				<div style="flex: 1; padding-top:8px"><label for='enable'>启用插件</label></div>
+				<div style="flex: 1">
+					<input class='tgl tgl-input' id='enable' type='checkbox'>
+			    <label class='tgl-btn' for='enable'></label>
+			  </div>
+			</div>
     	<p id="tip" style="color: rgb(115, 119, 122); font-size: 13px;"></p>
     	<p>
 				<label>学号<br />
@@ -63,8 +83,13 @@
 				<label>密码<br />
 				<input type="password" id="password" /></label>
 			</p>
-			<br/><br/>
+			<p>
+				<label>选课辅助功能刷新间隔<br />
+				<input type="text" id="interval" placeholder="单位：毫秒，默认1500"/></label>
+			</p>
+			<hr/>
 			<div align="center"><button class="button blue" id="score">来查成绩！！</button></div> 
+			<hr/>
 			<p style="color: rgb(115, 119, 122); font-size: 11px;">Copyright ©2017 <a id="site" href="#">Zhouii</a></p>
     </div>
   </body>

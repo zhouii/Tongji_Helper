@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "Tongji Helper",
-  "description": "超威蓝猫制作的同济助手浏览器插件，目前可在出现统一身份认证网页时自动登录，更多功能敬请期待！",
-  "version": "1.0",
+  "description": "能绕过Chrome内核浏览器的xuanke网验证码错误无法登录Bug并且自动登录同济各种网站的Chrome插件，还有选课辅助、评教辅助等功能(⊙_⊙)~",
+  "version": "1.1",
 
   "browser_action": {
     "default_icon": "icon.png",
@@ -17,8 +17,9 @@
   "content_scripts": [
     {
       "matches": ["*://*.tongji.edu.cn/*"],
-      "js": ["js/jquery-3.1.1.min.js", "js/tjlogin.js"],
-      "all_frames": true
+      "js": ["js/jquery-3.1.1.min.js", "js/tj.js"],
+      "all_frames": true,
+      "run_at": "document_end"
     }
   ],
   
