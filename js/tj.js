@@ -1,13 +1,12 @@
 
-
-chrome.storage.local.get(['username','password','enable','interval'],function (items) {
-	if (!items['enable']) return;
+chrome.storage.local.get(['username','password','enable','interval','status'],function (items) {
+	if (!items['enable'] || items['status']!='allow') return;
 	
 	if (window.location.href.indexOf("option=credential")>0) {//统一身份认证
 		$('#username').val(items['username']==null?"":items['username']).hide();
 		$('#password').val(items['password']==null?"":items['password']).hide();
 		$('[name=submit]').click();
-		$('body').html('<h1 align="center">Bluecat Helper 正在为您自动登录…</h1>');
+		$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
 	}
 	
 	if (window.location.href.indexOf("/ID2/loginvalidservice.aspx")>0) {//图书馆系统
@@ -15,7 +14,7 @@ chrome.storage.local.get(['username','password','enable','interval'],function (i
 		$('#TextBox_name').val(items['username']==null?"":items['username']).hide();
 		$('#TextBox_pwd').val(items['password']==null?"":items['password']).hide();
 		$('#Button_ok').click();
-		$('body').html('<h1 align="center">Bluecat Helper 正在为您自动登录…</h1>');
+		$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
 	}
 	
 	if (window.location.href.indexOf("/clientweb/xcus")>0) {//研习室系统
@@ -23,7 +22,7 @@ chrome.storage.local.get(['username','password','enable','interval'],function (i
 			$('span[class="glyphicon glyphicon-log-in"]').click();
 			$('input[name=id]').val(items['username']==null?"":items['username']).hide();
 			$('input[name=pwd]').val(items['password']==null?"":items['password']).hide();
-			$('input[value="登录"]').click().val('Bluecat Helper 正在为您自动登录…').prop('disabled',true);
+			$('input[value="登录"]').click().val('Tongji Helper 正在为您自动登录…').prop('disabled',true);
 		}
 	}
 	
@@ -31,7 +30,7 @@ chrome.storage.local.get(['username','password','enable','interval'],function (i
 		$('[name="loginForm.name"]').val(items['username']==null?"":items['username']).hide();
 		$('[name="loginForm.password"]').val('1');//items['password']==null?"":items['password']).hide();
 		$('[name=submitButton]').click();
-		$('body').html('<h1 align="center">Bluecat Helper 正在为您自动登录…</h1>');
+		$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
 	}
 	
 	if (window.location.host=="xuanke.tongji.edu.cn") {//辣鸡xuanke网
@@ -39,7 +38,7 @@ chrome.storage.local.get(['username','password','enable','interval'],function (i
 			$('#username').val(items['username']==null?"":items['username']);
 			$('#password').val(items['password']==null?"":items['password']);
 			$('input[name="c_submit"]').prop("type","submit").click();
-			$('body').html('<h1 align="center">Bluecat Helper 正在为您自动登录…</h1>');
+			$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
 		}
 		
 		if (window.location.href.indexOf("tj_login/frame.jsp")>0) {
@@ -50,7 +49,7 @@ chrome.storage.local.get(['username','password','enable','interval'],function (i
 		if (window.location.href.indexOf("loginTree.jsp")>0) {
 			$('#navSubMenu_').hide();
 			$('font[size="-1"]').hide();
-			setTimeout(function(){parent.detailfrm.location="redirect.jsp?link=/tj_xuankexjgl/score/query/student/cjcx.jsp?qxid=20051013779916$mkid=20051013779901&qxid=20051013779916";},500);
+			setTimeout(function(){parent.detailfrm.location="redirect.jsp?link=/tj_xuankexjgl/score/query/student/cjcx.jsp?qxid=20051013779916$mkid=20051013779901&qxid=20051013779916";},1000);
 		}
 		
 		if (window.location.href.indexOf("xspj.jsp")>0) {
@@ -59,7 +58,7 @@ chrome.storage.local.get(['username','password','enable','interval'],function (i
 				$('#judge').click();
 				return;
 			}
-			$('tbody:last tr:eq(1)').after('<tr><td colspan="4"><h3 align="center">Bluecat Tongji Helper 帮你点好了鼠标(⊙_⊙)~</h3></td></tr>');
+			$('tbody:last tr:eq(1)').after('<tr><td colspan="4"><h3 align="center">Tongji Helper 帮你点好了鼠标(⊙_⊙)~</h3></td></tr>');
 			$('tbody:last tr:eq(-3) td').prepend('<center><button type="button" id="yj1">讲课生动，课堂气氛活跃，很优秀的老师</button><button type="button" id="yj2">上课总体很好，只有一小点美中不足</button><button type="button" id="yj3">课堂质量一般，有待改进</button><button type="button" id="yj4">这种课听了像没听一样</button><button type="button" id="yj5">渣滓一个！这种人待在同济是同济之耻</button></center>');
 			$('#yj1').click(function (){$('#yj').html($('#yj1').html());$('input[type=radio][value=A]').prop('checked',true);});
 			$('#yj2').click(function (){$('#yj').html($('#yj2').html());$('input[type=radio][value=B]').prop('checked',true);});
@@ -71,18 +70,25 @@ chrome.storage.local.get(['username','password','enable','interval'],function (i
 		
 	}
 	
-	if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/tJStdElectCourse!batchOperator.action")>0) {
-		if ($('table').html().indexOf('成功')>0) $('body').html('<h1 align="center" style="padding:50px">已选课成功！恭喜！——Bluecat Tongji Helper</h1><h2 align="center"><a href="https://www.zhouii.com/contact-me">如果有帮助欢迎donate以协助我做得更好(⊙v⊙)</a></h2>');
-		else setTimeout('refre()',((items['interval']==null || items['interval']=='')?1500:items['interval']));
-	}	
-	
-	if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/tJStdElectCourse!defaultPage.action")>0) {
-		setInterval('checkandadd()',1500);
-		$('th[width="25%"]').prop('width','19%');
-		$('#teachClass>table>thead>tr').append('<th width="6%"><img src="https://qzs.qq.com/qzone/em/e248.gif" alt="斜眼笑"></th>')
+	if (window.location.host=="4m3.tongji.edu.cn") {
+		if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/tJStdElectCourse!batchOperator.action")>0) {
+			if ($('table').html().indexOf('成功')>0) $('body').html('<h1 align="center" style="padding:50px">已选课成功！恭喜！——Bluecat Tongji Helper</h1><h2 align="center"><a href="https://www.zhouii.com/contact-me">如果有帮助欢迎donate以协助我做得更好(⊙v⊙)</a></h2>');
+			else setTimeout('refre()',((items['interval']==null || items['interval']=='')?1500:items['interval']));
+		}	
+		
+		if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/tJStdElectCourse!defaultPage.action")>0) {
+			$('#notice').after('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="9000006805"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><p id="adtip" align="center"></p>');
+			setInterval('checkandadd()',1500);
+			$('th[width="25%"]').prop('width','19%');
+			$('#teachClass>table>thead>tr').append('<th width="6%"><img src="https://qzs.qq.com/qzone/em/e248.gif" alt="斜眼笑"></th>')
+		}
 	}
-	
+
 });
+
+if (window.location.host=="xuanke.tongji.edu.cn" && window.location.href.indexOf("o.jsp")>0) {
+	chrome.runtime.sendMessage({'target':'bg','sh':$('td[nowrap]').html()});
+}
 
 function refre() {
 	$('table').after('<h2 align="center" style="padding:50px">Bluecat Tongji Helper 正在刷新…</h2>');
@@ -90,7 +96,10 @@ function refre() {
 }
 
 function checkandadd() {
-	if (false) return;
+	if ($('ins').html()=='') {
+		$('#adtip').html('我做插件也很辛苦啊。。免费开源的插件就靠广告赚点微小的外快。。我辅助你选课你还屏蔽我的广告你忍心吗<img src="https://qzs.qq.com/qzone/em/e150.gif"><br>辅助按钮将在广告加载完成后显示');
+		return;
+	}
 	var old=false;
 	if ($('tr[class=red][id^=1111]').length>0) old=$('tr[class=red][id^=1111]').prop('id');
 	if ($('#teachClass>table>tbody>tr>td:last>a').length>0) return;

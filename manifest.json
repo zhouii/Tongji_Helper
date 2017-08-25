@@ -2,35 +2,42 @@
   "manifest_version": 2,
 
   "name": "Tongji Helper",
-  "description": "能绕过Chrome内核浏览器的xuanke网验证码错误无法登录Bug并且自动登录同济各种网站的Chrome插件，还有选课辅助、评教辅助等功能(⊙_⊙)~",
-  "version": "1.1",
+  "description": "能自动登录包括xuanke网在内的同济的各种网站，还有选课辅助、评教辅助等功能(⊙v⊙)~",
+  "version": "1.2",
 
   "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
+    "default_icon": "img/icon.png",
+    "default_popup": "popup.html",
+    "default_title": "惊艳的自动登录和选课辅助功能~"
   },
   
   "icons": {
-  	"48": "icon48.png",
-   	"128": "icon.png" },
+  	"48": "img/icon48.png",
+   	"128": "img/icon.png"
+  },
   
   "content_scripts": [
     {
       "matches": ["*://*.tongji.edu.cn/*"],
       "js": ["js/jquery-3.1.1.min.js", "js/tj.js"],
       "all_frames": true,
-      "run_at": "document_end"
+      "run_at": "document_idle"
     }
   ],
   
   "background": {
-    "scripts": ["js/background.js"]
+    "scripts": ["js/jquery-3.1.1.min.js", "js/background.js"]
   },
+  
+  "options_page": "options.html",
+  
+  "homepage_url": "https://www.zhouii.com/tj-helper",
   
   "permissions": [
     "storage",
     "webRequest",
     "webRequestBlocking",
-    "*://*.tongji.edu.cn/"
+    "*://*.tongji.edu.cn/",
+    "*://*.zhouii.com/"
   ]
 }
