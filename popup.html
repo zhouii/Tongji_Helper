@@ -1,40 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  	<meta charset="UTF-8">
-    <title>Tongji Helper</title>
-		<script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/popup.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mystyle.css" rel="stylesheet">
-    <script src="js/bootstrap.min.js"></script>
-  </head>
-  <body>
-    <div id="waiting"><h3></h3><img src="img/pending.gif" align="center" /></div>
-    <div style="width: 300px; padding: 10px; ">
-    	<div align="center">
-    		<img src="img/icon.png" height="80px"/>
-    		<h2>Tongji Helper</h2>
-    	</div>
-    	<p style="color: rgb(115, 119, 122); font-size: 14px;">超威蓝猫制作的同济助手浏览器插件，不仅能自动登录，还有更多功能自己探索去→_→</p>
-    	<div id="alert-green" class="alert alert-success" style="display:none"></div>
-    	<div id="alert-blue" class="alert alert-info" style="display:none"></div>
-    	<div id="alert-yellow" class="alert alert-warning" style="display:none"></div>
-    	<div id="alert-red" class="alert alert-danger" style="display:none"></div>
-    	<div style="display: flex;">
-				<div style="flex: 1; padding-top:8px"><label for='enable'>启用插件</label></div>
-				<div style="flex: 1">
-					<input class='tgl tgl-input' id='enable' type='checkbox'>
-			    <label class='tgl-btn' for='enable'></label>
-			  </div>
+<head>
+	<meta charset="UTF-8">
+	<title>Tongji Helper</title>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/popup.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/mystyle.css" rel="stylesheet">
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div id="waiting"><h3></h3><img src="img/pending.gif" align="center" /></div>
+	<div style="width: 300px; padding: 10px; ">
+		<div align="center">
+			<img src="img/icon.png" height="80px"/>
+			<h2>Tongji Helper</h2>
+		</div>
+		<p style="color: rgb(115, 119, 122); font-size: 14px;">超威蓝猫制作的同济助手浏览器插件，不仅能自动登录，还有更多功能自己探索去→_→</p>
+		<div id="alert-green" class="alert alert-success" style="display:none"></div>
+		<div id="alert-blue" class="alert alert-info" style="display:none"></div>
+		<div id="alert-yellow" class="alert alert-warning" style="display:none"></div>
+		<div id="alert-red" class="alert alert-danger" style="display:none"></div>
+		<div style="display: flex;">
+			<div style="flex: 1; padding-top:8px"><label for='enable'>启用插件</label></div>
+			<div style="flex: 1">
+				<input class='tgl tgl-input' id='enable' type='checkbox'>
+				<label class='tgl-btn' for='enable'></label>
 			</div>
-			<hr/>
-			<div align="center"><a type="button" class="btn btn-default" href="options.html" target="_blank">修改设置</a></div> 
-			<hr/>
-			<div align="center"><a type="button" class="btn btn-info" href="http://xuanke.tongji.edu.cn/" target="_blank">来查成绩！！</a></div> 
-			<hr/>
-			<p style="color: rgb(115, 119, 122); font-size: 12px;">Copyright ©2017 <a href="https://www.zhouii.com/tj-helper" target="_blank">Zhouii</a></p>
-    </div>
-  </body>
+		</div>
+		<hr/>
+		<div align="center"><a type="button" class="btn btn-default" href="options.html" target="_blank">修改设置</a></div> 
+		<hr/>
+		<div class="row" style="text-align: center;">
+			<div class="col-xs-12"><a type="button" class="btn btn-info" href="http://xuanke.tongji.edu.cn/" target="_blank">来查成绩！！</a></div> 
+			<!--<div class="col-xs-6"><a type="button" class="btn btn-info" href="tool.html" target="_blank">实用小工具</a></div>-->
+		</div>
+		<hr/>
+		<div style="text-align: center;margin-bottom: 20px">
+			<p>
+				<div class="dropup">
+					<button id="otherlnk" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+						其他快捷方式
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a href="http://lib.tongji.edu.cn/clientweb/xcus/ic2/Default.aspx" target="_blank">研习室预订</a></li>
+						<li><a href="http://webpac.lib.tongji.edu.cn/opac/search.php" target="_blank">书目检索</a></li>
+						<li><a href="http://202.120.163.129:88/Default.aspx" target="_blank">电量查询</a></li>
+						<li><a href="http://4m3.tongji.edu.cn" target="_blank">4m3</a></li>
+					</ul>
+				</div>
+			</p>
+		</div>
+		<p style="color: rgb(115, 119, 122); font-size: 12px;">Copyright ©2018 <a href="https://www.zhouii.com/tj-helper" target="_blank">Zhouii</a></p>
+	</div>
+</body>
 </html>
 

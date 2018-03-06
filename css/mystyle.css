@@ -15,7 +15,7 @@ body {
 .tgl-input+.tgl-btn:after{border-radius:2em;background:#fbfbfb;-webkit-transition:left .3s cubic-bezier(.175,.885,.32,1.275),padding .3s ease,margin .3s ease;transition:left .3s cubic-bezier(.175,.885,.32,1.275),padding .3s ease,margin .3s ease;-webkit-box-shadow:0 0 0 1px rgba(0,0,0,.1),0 4px 0 rgba(0,0,0,.08);box-shadow:0 0 0 1px rgba(0,0,0,.1),0 4px 0 rgba(0,0,0,.08)}
 .tgl-input+.tgl-btn:active{-webkit-box-shadow:inset 0 0 0 2em #e8eae9;box-shadow:inset 0 0 0 2em #e8eae9}
 .tgl-input+.tgl-btn:active:after{padding-right:.8em}
-.tgl-input:checked+.tgl-btn{background:#86d993}
+.tgl-input:checked+.tgl-btn{background:#61b6df}
 .tgl-input:checked+.tgl-btn:active{-webkit-box-shadow:none;box-shadow:none}
 .tgl-input:checked+.tgl-btn:active:after{margin-left:-.8em}
 

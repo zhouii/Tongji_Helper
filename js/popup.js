@@ -17,6 +17,9 @@ $(document).ready(function() {
 	$('#enable').change(function() {
 		chrome.storage.local.set({'enable':$('#enable').prop('checked')});
 	});
+
+	$('#otherlnk').mouseover(function(){$(this).click()});
+
 });
 
 function lock(tip,showimg) {

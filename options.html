@@ -1,49 +1,58 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  	<meta charset="UTF-8">
-    <title>Tongji Helper Settings</title>
-		<script src="js/jquery-3.1.1.min.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mystyle.css" rel="stylesheet">
-    <script src="js/bootstrap.min.js"></script>
-  </head>
-	<body style="background: #f1f1f1;">
-		<div style="width: 500px; padding: 10px; margin:auto ">
-			<div id="tip" class="alert alert-success" style="display:none;position:absolute;width:480px"></div>
-			<p style="text-align:center; margin:20px"><img src="img/icon.png" height="100px" /></p>
-			<div class="panel panel-default">
-			  <div class="panel-heading">
-			    <h3 class="panel-title">设置</h3>
-			  </div>
-			  <div class="panel-body">
-			    <form>
-						<p>
-							<div class="form-group">
-								<label for="username">学号</label>
-								<input type="text" id="username" class="form-control" />
+<head>
+	<meta charset="UTF-8">
+	<title>Tongji Helper Settings</title>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/mystyle.css" rel="stylesheet">
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body style="background: #f1f1f1;">
+	<div style="width: 500px; padding: 10px; margin:auto ">
+		<div id="tip" class="alert alert-success" style="display:none;position:fixed;width:500px;margin-left:-10px"></div>
+		<p style="text-align:center; margin:30px"><img src="img/icon.png" height="100px" /></p>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">设置</h3>
+			</div>
+			<div class="panel-body">
+				<form>
+					<p>
+						<div class="form-group">
+							<label for="username">学号</label>
+							<input type="text" id="username" class="form-control" />
+						</div>
+					</p>
+					<p>
+						<div class="form-group">
+							<label for="password">密码（仅用于自动登录，绝不会上传~不信你去看<a href="https://github.com/zhouii/Tongji_Helper" target="_blank">源代码</a>）</label>
+							<input type="password" id="password" class="form-control" />
+						</div>
+					</p>
+					<p>
+						<div class="form-group" style="width:50%">
+							<label for="interval">选课辅助功能刷新间隔</label>
+							<div class="input-group">
+								<input type="text" id="interval" class="form-control" placeholder="默认1500"/>
+								<span class="input-group-addon">毫秒</span>
 							</div>
-						</p>
-						<p>
-							<div class="form-group">
-								<label for="password">密码（仅用于自动登录，绝不会上传~不信你去看<a href="https://github.com/zhouii/Tongji_Helper" target="_blank">源代码</a>）</label>
-								<input type="password" id="password" class="form-control" />
+						</div>
+					</p>
+					<p>
+						<div class="form-group" style="width:50%">
+							<label for="showReserver">显示研习室预约者姓名</label>
+							<div class="input-group">
+								<input class='tgl tgl-input' id='showReserver' type='checkbox'>
+								<label class='tgl-btn' for='showReserver'></label>
 							</div>
-						</p>
-						<p>
-							<div class="form-group" style="width:50%">
-								<label for="interval">选课辅助功能刷新间隔</label>
-								<div class="input-group">
-									<input type="text" id="interval" class="form-control" placeholder="默认1500"/>
-									<span class="input-group-addon">毫秒</span>
-								</div>
-							</div>
-						</p>
-				    <button id="save" type="button" class="btn btn-primary" style="float:right;padding-right:20px;padding-left:20px">保存</button>
-					</form>
-			  </div>
+						</div>
+					</p>
+					<button id="save" type="button" class="btn btn-primary" style="float:right;padding-right:20px;padding-left:20px">保存</button>
+				</form>
 			</div>
 		</div>
-  </body>
-  <script src="js/options.js"></script>
+	</div>
+</body>
+<script src="js/options.js"></script>
 </html>
