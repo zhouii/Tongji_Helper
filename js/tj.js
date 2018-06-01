@@ -1,5 +1,5 @@
 
-chrome.storage.local.get(['username','password','enable','interval','status'],function (items) {
+chrome.storage.local.get(['username','password','enable','interval','status','mail','mail_index'],function (items) {
 	if (!items['enable']) return;
 	if (window.location.host.indexOf("192.168.192")==0 && $("title").html()=="同济大学上网认证系统") {
 		$('#loginname').val(items['username']==null?"":items['username']).hide();
@@ -18,7 +18,7 @@ chrome.storage.local.get(['username','password','enable','interval','status'],fu
 	}
 	
 	if (window.location.host=="lib.tongji.edu.cn") {
-		if (window.location.href.indexOf("/ID2/loginvalidservice.aspx")>0) {//图书馆系统
+		if (window.location.href.indexOf("/loginvalidservice.aspx")>0) {//图书馆系统
 			if ($('#Label_error').html()!='') return;
 			$('#TextBox_name').val(items['username']==null?"":items['username']);
 			$('#TextBox_pwd').val(items['password']==null?"":items['password']);
@@ -51,15 +51,13 @@ chrome.storage.local.get(['username','password','enable','interval','status'],fu
 	}
 
 	if (window.location.href=="http://itongjis.tongji.edu.cn/Home/Public/login") {//itongjis
-		$('[name="Login.Token1"]').val(items['username']==null?"":items['username']);
-		$('[name="Login.Token2"]').val(items['password']==null?"":items['password']);
-		$('#button').click();
+		$('input.sub').click();
 		$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
 	}
 	
 	if (window.location.host=="xuanke.tongji.edu.cn") {//辣鸡xuanke网
 		if ((window.location.pathname=="/" || window.location.pathname=="/index.jsp") && window.location.href.indexOf("?flag=5")<0) {
-			window.location.href="http://xuanke.tongji.edu.cn:9321/oiosaml/saml/login";
+			window.location.href=$('a').prop('href');
 		}
 		
 		if (window.location.href.indexOf("tj_login/frame.jsp")>0) {
@@ -123,6 +121,53 @@ chrome.storage.local.get(['username','password','enable','interval','status'],fu
 		}");
 	}
 
+	if (window.location.host=='xui.ptlogin2.qq.com' && window.location.href.indexOf('mail.qq.com')) {//qq邮箱自动登录
+		if (!items['mail'][items['mail_index']].mail.endsWith('@qq.com') && !items['mail'][items['mail_index']].mail.endsWith('@foxmail.com')) return;
+		chrome.storage.local.set({mail_index:-1});
+		$('#u').val(items['mail'][items['mail_index']].mail);
+		$('#p').val(items['mail'][items['mail_index']].pswd);
+		$('#login_button').click();
+	}
+
+	if (window.location.host=='dl.reg.163.com') {//163邮箱自动登录
+		if (!items['mail'][items['mail_index']].mail.endsWith('@163.com')) return;
+		chrome.storage.local.set({mail_index:-1});
+		$('[name="email"]').val(items['mail'][items['mail_index']].mail);
+		$('[name="password"]').val(items['mail'][items['mail_index']].pswd).focus();
+		myeval("var ev = document.createEvent('KeyboardEvent');\
+		ev.initKeyboardEvent('keyup', true, true, window);\
+		Object.defineProperty(ev,'keyCode',{get : function() {return this.keyCodeVal;}}); \
+        ev.keyCodeVal=13;\
+		document.getElementsByName('password')[0].dispatchEvent(ev);");
+	}
+
+	if (window.location.host=='passport.126.com') {//126邮箱自动登录
+		if (!items['mail'][items['mail_index']].mail.endsWith('@126.com')) return;
+		chrome.storage.local.set({mail_index:-1});
+		$('[name="email"]').val(items['mail'][items['mail_index']].mail);
+		$('[name="password"]').val(items['mail'][items['mail_index']].pswd).focus();
+		myeval("var ev = document.createEvent('KeyboardEvent');\
+		ev.initKeyboardEvent('keyup', true, true, window);\
+		Object.defineProperty(ev,'keyCode',{get : function() {return this.keyCodeVal;}}); \
+        ev.keyCodeVal=13;\
+		document.getElementsByName('password')[0].dispatchEvent(ev);");
+	}
+
+	if (window.location.href=='https://mail.tongji.edu.cn/') {//同济邮箱自动登录
+		if (!items['mail'][items['mail_index']].mail.endsWith('@tongji.edu.cn')) return;
+		chrome.storage.local.set({mail_index:-1});
+		$('#uid').val(items['mail'][items['mail_index']].mail);
+		$('#password').val(items['mail'][items['mail_index']].pswd);
+		$('button.submit').click();
+	}
+
+	if (window.location.host=='passport.alibaba.com' && window.location.href.indexOf('appName=yunmail')) {//阿里云邮箱自动登录
+		if (!items['mail'][items['mail_index']].mail.endsWith('@aliyun.com')) return;
+		chrome.storage.local.set({mail_index:-1});
+		$('#fm-login-id').val(items['mail'][items['mail_index']].mail);
+		$('#fm-login-password').val(items['mail'][items['mail_index']].pswd);
+		$('#fm-login-submit').click();
+	}
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

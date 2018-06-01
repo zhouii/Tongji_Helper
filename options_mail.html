@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Tongji Helper Settings</title>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/mystyle.css" rel="stylesheet">
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/vue.js"></script>
+</head>
+<body style="background: #f1f1f1;">
+	<div style="max-width: 1300px; padding: 10px; margin:auto ">
+		<div id="tip" class="alert alert-success" style="display:none;position:fixed;width:500px;margin:auto;left:0px;right: 0px;top: 50px"></div>
+		<div id="errtip" class="alert alert-danger" style="display:none;position:fixed;width:500px;margin:auto;left:0px;right: 0px;top: 50px"></div>
+		<p style="text-align:center; margin:30px"><img src="img/icon.png" height="100px" /></p>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">课程邮箱设置</h3>
+			</div>
+			<div class="panel-body">
+				<p class="help-block">公共邮箱目前支持QQ、Foxmail、163、126、同济、阿里云邮箱，如有其他邮箱需求请<a href="https://www.zhouii.com/tj-helper" target="_blank">在评论区留言</a></p>
+				<form>
+					<table class="table">
+						<thead>
+							<tr>
+								<th width="15%">课程名称</th>
+								<th>公共邮箱</th>
+								<th>公邮密码</th>
+								<th>作业邮箱</th>
+								<th>备注</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="mail">
+							<tr v-for="mail in mails">
+								<td><input type="text" class="form-control" v-model="mail.name" /></td>
+								<td><input type="text" class="form-control" v-model="mail.mail" /></td>
+								<td><input type="text" class="form-control" v-model="mail.pswd" /></td>
+								<td><input type="text" class="form-control" v-model="mail.hmwk" /></td>
+								<td><input type="text" class="form-control" v-model="mail.memo" /></td>
+								<td><button type="button" class="btn btn-danger" @click="deleteMail($index)">删除</button></td>
+							</tr>
+						</tbody>
+					</table>
+					<button id="addmail" type="button" class="btn btn-success">新增</button>
+					<button id="save" type="button" class="btn btn-primary" style="float:right;padding-right:20px;padding-left:20px">保存</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script src="js/options_mail.js"></script>
+</body>
+</html>

@@ -41,6 +41,7 @@ chrome.contextMenus.create({contexts:['selection'],title:'在同济图书馆查�
 var interval,sh,c;
 
 function checkstatus() {
+	chrome.storage.local.set({mail_index:-1});
 	chrome.storage.local.get(['machine'],function (items) {
 		if (items['machine']==null) chrome.storage.local.set({'machine':Math.random().toString(36).substr(2)},function () {
 			checkstatus1();

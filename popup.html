@@ -4,10 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Tongji Helper</title>
 	<script src="js/jquery-3.1.1.min.js"></script>
-	<script src="js/popup.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/mystyle.css" rel="stylesheet">
 	<script src="js/bootstrap.min.js"></script>
+	<script src="js/vue.js"></script>
 </head>
 <body>
 	<div id="waiting"><h3></h3><img src="img/pending.gif" align="center" /></div>
@@ -29,7 +29,11 @@
 			</div>
 		</div>
 		<hr/>
-		<div align="center"><a type="button" class="btn btn-default" href="options.html" target="_blank">修改设置</a></div> 
+		<div align="center">
+			<div class="btn-group">
+				<a type="button" class="btn btn-default" href="options.html" target="_blank">修改设置</a>
+			</div>
+		</div> 
 		<hr/>
 		<div class="row" style="text-align: center;">
 			<div class="col-xs-12"><a type="button" class="btn btn-info" href="http://xuanke.tongji.edu.cn/" target="_blank">来查成绩！！</a></div> 
@@ -38,22 +42,36 @@
 		<hr/>
 		<div style="text-align: center;margin-bottom: 20px">
 			<p>
-				<div class="dropup">
-					<button id="otherlnk" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-						其他快捷方式
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a href="http://lib.tongji.edu.cn/clientweb/xcus/ic2/Default.aspx" target="_blank">研习室预订</a></li>
-						<li><a href="http://webpac.lib.tongji.edu.cn/opac/search.php" target="_blank">书目检索</a></li>
-						<li><a href="http://202.120.163.129:88/Default.aspx" target="_blank">电量查询</a></li>
-						<li><a href="http://4m3.tongji.edu.cn" target="_blank">4m3</a></li>
-					</ul>
+				<div class="btn-group" role="group">
+					<div id="otherlnk_div" class="dropup btn-group" role="group">
+						<button id="otherlnk_btn" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+							其他快捷方式
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a href="http://lib.tongji.edu.cn/clientweb/xcus/ic2/Default.aspx" target="_blank">研习室预订</a></li>
+							<li><a href="http://webpac.lib.tongji.edu.cn/opac/search.php" target="_blank">书目检索</a></li>
+							<li><a href="http://202.120.163.129:88/Default.aspx" target="_blank">电量查询</a></li>
+							<li><a href="http://4m3.tongji.edu.cn" target="_blank">4m3</a></li>
+						</ul>
+					</div>
+					<div id="mail_div" class="dropup btn-group" role="group">
+						<button id="mail_btn" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+							课程公邮
+							<span class="caret"></span>
+						</button>
+						<ul id="mail" class="dropdown-menu" style="left: unset;right: -30px;">
+							<li style="float: right;"><a href="options_mail.html" target="_blank" src="img/setting.png" style="background-image: url(/img/setting.png); width: 18px; height: 18px;background-repeat: round; padding: 0px; margin-right:  5px;"></a></li>
+							<li v-for="mail in mails"><a :id="$index" @click="leftClick($index)" @contextmenu="rightClick" href="#">{{mail.name}}</a></li>
+							<li style="font: italic 12px 黑体; margin: auto; width: fit-content;padding: 5px;">右击复制作业邮箱</li>
+						</ul>
+					</div>
 				</div>
 			</p>
 		</div>
 		<p style="color: rgb(115, 119, 122); font-size: 12px;">Copyright ©2018 <a href="https://www.zhouii.com/tj-helper" target="_blank">Zhouii</a></p>
 	</div>
+	<script src="js/popup.js"></script>
 </body>
 </html>
 

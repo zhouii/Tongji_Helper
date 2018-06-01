@@ -8,6 +8,6 @@ chrome.storage.local.get(['username','password','enable','interval','showReserve
 $('#save').click(function () {
 	chrome.storage.local.set({'username':$('#username').val(),'password':$('#password').val(),'interval':parseInt($('#interval').val()),'showReserver':$('#showReserver').prop('checked'),'enable':true,'status':'toconnect'},function() {
 		chrome.runtime.sendMessage({'target':'bg','action':'checkstatus'});
-		$('#tip').css({'top':'30px'}).html('保存成功~').fadeIn().delay(2000).fadeOut();
+		$('#tip').html('保存成功~').fadeIn().delay(2000).fadeOut();
 	});
 });
