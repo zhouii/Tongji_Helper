@@ -94,7 +94,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 	
 	if (window.location.host=="4m3.tongji.edu.cn") {
 		if (window.location.href.indexOf("StdElectCourse!batchOperator.action")>0) {
-			if ($('table').html().indexOf('成功')>0) {
+			if ($('html').html().indexOf('成功')>0) {
 				$('table').after('<h1 align="center" style="padding:50px">已选课成功！恭喜！——Tongji Helper</h1><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="6753584008"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><h2 align="center" style="margin:30px">如果有帮助欢迎点击上方广告或通过微信支付宝donate以协助我做得更好(⊙v⊙)</h2><div style="max-width:700px;margin: auto;"><div style="float:left"><img src="https://www.zhouii.com/public/qr_wxpay.jpg" style="max-width: 300px;"></div><div style="float:right"><img src="https://www.zhouii.com/public/qr_alipay.jpg" style="max-width: 300px;"></div></div>');
 				chrome.runtime.sendMessage({'target':'bg','action':'electSucceed','c':$('table').html()});
 			}

@@ -10,7 +10,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 chrome.webRequest.onBeforeRequest.addListener(
         function(details) {if (details.url.indexOf('&c=1')>0)return; chrome.tabs.sendMessage(details.tabId,{'target':'cs','action':'addReserverName','url':details.url}); },
-        {urls: ["http://lib.tongji.edu.cn/ClientWeb/pro/ajax/device.aspx*"]});
+        {urls: ["http://lib.tongji.edu.cn/yxxj/ClientWeb/pro/ajax/device.aspx*"]});
         
 chrome.webRequest.onBeforeRequest.addListener(
         function(details) { return {redirectUrl: "http://cwc.tongji.edu.cn/WFManager/home2.jsp"}; },
@@ -86,9 +86,11 @@ function clearAllInterval() {
 function checkelectricity(){
 	window.location.href="http://202.120.163.129:88";
 	$.ajax({url:"http://202.120.163.129:88/usedRecord.aspx",xhrFields: {
-            withCredentials: true
-        },crossDomain: true,beforeSend: function (request) {
+		withCredentials: true
+	},crossDomain: true,beforeSend: function (request) {
 
-request.setRequestHeader("Access-Control-Allow-Origin", "*");
-},success:function(res){console.log(res);}});
+		request.setRequestHeader("Access-Control-Allow-Origin", "*");
+	},success:function(res){console.log(res);}});
+	chrome.notifications.create('electricity',{'type':'basic','iconUrl':'img/icon48.png','title':'低电量提醒','message':'已低电量','buttons':[{'title':'朕知道了'}],'requireInteraction':true});
+	chrome.notifications.onButtonClicked.addListener(function (){chrome.notifications.clear('electricity')});
 }
