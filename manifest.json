@@ -3,7 +3,7 @@
 
   "name": "Tongji Helper",
   "description": "能自动登录同济的各种网站，还有邮箱登录、选课辅助、评教辅助等功能(⊙v⊙)~",
-  "version": "1.10.1",
+  "version": "1.11",
 
   "browser_action": {
     "default_icon": "img/icon.png",
@@ -18,7 +18,7 @@
   
   "content_scripts": [
     {
-      "matches": ["*://*.tongji.edu.cn/*","http://192.168.192.10/*","http://192.168.192.17/*","http://192.168.192.18/*","*://xui.ptlogin2.qq.com/*","*://dl.reg.163.com/*","*://passport.126.com/*","*://passport.alibaba.com/*"],
+      "matches": ["*://*.tongji.edu.cn/*","http://192.168.192.10/*","http://192.168.192.17/*","http://192.168.192.18/*","*://xui.ptlogin2.qq.com/*","*://dl.reg.163.com/*","*://passport.126.com/*","*://passport.alibaba.com/*","*://202.120.163.129/*"],
       "js": ["js/jquery-3.1.1.min.js", "js/myjs.js","js/tj.js"],
       "all_frames": true,
       "match_about_blank": true, 
@@ -27,7 +27,7 @@
   ],
   
   "background": {
-    "scripts": ["js/jquery-3.1.1.min.js", "js/background.js"]
+    "scripts": ["js/jquery-3.1.1.min.js", "js/myjs.js", "js/background.js"]
   },
   
   "options_page": "options.html",

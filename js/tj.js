@@ -1,5 +1,5 @@
 
-chrome.storage.local.get(['username','password','enable','interval','status','mail','mail_index'],function (items) {
+chrome.storage.local.get(['username','password','enable','interval','status','mail','mail_index','checkscore','setroom'],function (items) {
 	if (!items['enable']) return;
 	if (window.location.host.indexOf("192.168.192")==0 && $("title").html()=="同济大学上网认证系统") {
 		$('#loginname').val(items['username']==null?"":items['username']).hide();
@@ -68,7 +68,12 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		if (window.location.href.indexOf("loginTree.jsp")>0) {
 			$('#navSubMenu_').hide();
 			$('font[size="-1"]').hide();
-			setTimeout(function(){myeval("open11('01','/tj_xuankexjgl/score/query/student/cjcx.jsp?qxid=20051013779916&mkid=20051013779901','20051013779916','null','null');");},800);			
+			setTimeout(function(){
+				if (items['checkscore']==1) {
+					chrome.storage.local.set({checkscore:0});
+					myeval("open11('01','/tj_xuankexjgl/score/query/student/cjcx.jsp?qxid=20051013779916&mkid=20051013779901','20051013779916','null','null');");
+				}
+			},800);
 		}
 		
 		if (window.location.href.indexOf("xspj.jsp")>0) {
@@ -95,7 +100,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 	if (window.location.host=="4m3.tongji.edu.cn") {
 		if (window.location.href.indexOf("StdElectCourse!batchOperator.action")>0) {
 			if ($('html').html().indexOf('成功')>0) {
-				$('table').after('<h1 align="center" style="padding:50px">已选课成功！恭喜！——Tongji Helper</h1><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="6753584008"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><h2 align="center" style="margin:30px">如果有帮助欢迎点击上方广告或通过微信支付宝donate以协助我做得更好(⊙v⊙)</h2><div style="max-width:700px;margin: auto;"><div style="float:left"><img src="https://www.zhouii.com/public/qr_wxpay.jpg" style="max-width: 300px;"></div><div style="float:right"><img src="https://www.zhouii.com/public/qr_alipay.jpg" style="max-width: 300px;"></div></div>');
+				$('table').after('<iframe src="https://www.zhouii.com/tj_helper/elected.html" style="border: none;width: 100%;height: 800px;"></iframe>');
 				chrome.runtime.sendMessage({'target':'bg','action':'electSucceed','c':$('table').html()});
 			}
 			else setTimeout(refre,((items['interval']==null || items['interval']=='')?1500:items['interval']));
@@ -127,6 +132,12 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		$('#u').val(items['mail'][items['mail_index']].mail);
 		$('#p').val(items['mail'][items['mail_index']].pswd);
 		$('#login_button').click();
+	}
+
+	if ((window.location.href=='http://202.120.163.129:88/buyRecord.aspx' || window.location.href=='http://202.120.163.129:88/usedRecord.aspx')&&items['setroom']) {
+		var room=/房间\s*(\S*)\s*剩余/.exec($('html').html())[1];
+		chrome.storage.local.set({room:room,setroom:0});
+		chrome.runtime.sendMessage({'target':'bg','action':'setRoomSucceed','room':room});
 	}
 
 	if (window.location.host=='dl.reg.163.com') {//163邮箱自动登录
@@ -210,26 +221,5 @@ function checkandadd(typ) {
 			$(this).append('<td><a href="http://4m3.tongji.edu.cn/eams/'+typ+'StdElectCourse!batchOperator.action?electLessonIds='+$(this).prop('id')+'&withdrawLessonIds=&exchangeLessonPairs=" onclick=\'alert("即将新建窗口用于辅助，请不要关闭新建的窗口，并请将电脑自动睡眠时间调为“从不”以防刷新停止！")\' target="_blank">辅助</a></td>');
 		});
 	}
-}
-
-var date=new Date();
-Date.prototype.format = function(fmt) { 
-	var o = { 
-		"M+" : this.getMonth()+1,
-		"d+" : this.getDate(), //日 
-        "H+": this.getHours()%12, //小时 
-        "m+": this.getMinutes(), //分 
-        "s+": this.getSeconds(), //秒 
-        "S": this.getMilliseconds() //毫秒
-    }; 
-    if(/(y+)/.test(fmt)) {
-    	fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
-    }
-    for(var k in o) {
-    	if(new RegExp("("+ k +")").test(fmt)){
-    		fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-    	}
-    }
-    return fmt; 
 }
 

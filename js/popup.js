@@ -44,7 +44,8 @@ chrome.storage.local.get(['enable','status','msg','msg_content','mail'],function
 	}
 	if (items['msg']!='0') $('#alert-'+items['msg']).html(items['msg_content']).show();
 	v.mails=items['mail'];
-	
+	$('[data-url]').click(function(){chrome.tabs.create({url:$(this).data('url')});});
+	$('#checkscore').click(function(){chrome.storage.local.set({checkscore:1});});
 });
 
 $('#enable').change(function() {

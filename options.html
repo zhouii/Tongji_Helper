@@ -7,10 +7,13 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/mystyle.css" rel="stylesheet">
 	<script src="js/bootstrap.min.js"></script>
+	<style>
+		hr {margin: 0px}
+	</style>
 </head>
 <body style="background: #f1f1f1;">
 	<div style="max-width: 600px; padding: 10px; margin:auto ">
-		<div id="tip" class="alert alert-success" style="display:none;position:fixed;width:500px;margin:auto;left:0px;right: 0px;top: 50px"></div>
+		<div id="tip" class="alert alert-success" style="display:none;position:fixed;width:500px;margin:auto;left:0px;right: 0px;top: 50px;z-index: 100"></div>
 		<p style="text-align:center; margin:30px"><img src="img/icon.png" height="100px" /></p>
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -18,6 +21,8 @@
 			</div>
 			<div class="panel-body">
 				<form>
+					<p class="help-block">核心功能</p>
+					<hr>
 					<p>
 						<div class="form-group">
 							<label for="username">学号</label>
@@ -26,8 +31,9 @@
 					</p>
 					<p>
 						<div class="form-group">
-							<label for="password">密码（仅用于自动登录，绝不会上传~不信你去看<a href="https://github.com/zhouii/Tongji_Helper" target="_blank">源代码</a>）</label>
+							<label for="password">密码</label>
 							<input type="password" id="password" class="form-control" />
+							<p class="help-block" style="font-style: italic;">仅用于自动登录，绝不会上传~不信你去看<a href="https://github.com/zhouii/Tongji_Helper" target="_blank">源代码</a></p>
 						</div>
 					</p>
 					<p>
@@ -39,21 +45,14 @@
 							</div>
 						</div>
 					</p>
+					<p class="help-block" style="margin-top: 20px">寝室低电量提醒</p>
+					<hr>
 					<p>
 						<div class="form-group" style="width:50%">
-							<label for="showReserver">显示研习室预约者姓名</label>
+							<label for="elec_enable">开启寝室低电量提醒</label>
 							<div class="input-group">
-								<input class='tgl tgl-input' id='showReserver' type='checkbox'>
-								<label class='tgl-btn' for='showReserver'></label>
-							</div>
-						</div>
-					</p>
-					<!--<p>
-						<div class="form-group" style="width:50%">
-							<label for="elec_enable">寝室低电量提示（制作中敬请期待）</label>
-							<div class="input-group">
-								<input class='tgl tgl-input' id='elec_enable' type='checkbox'>
-								<label class='tgl-btn' for='elec_enable'></label>
+								<input class="tgl tgl-input" id="elec_enable" type="checkbox">
+								<label class="tgl-btn" for="elec_enable"></label>
 							</div>
 						</div>
 						<div class="form-group" style="width:50%">
@@ -63,7 +62,23 @@
 								<span class="input-group-addon">元</span>
 							</div>
 						</div>
-					</p>-->
+						<div class="form-group" style="width:50%">
+							<label>房间号</label>
+							<input type="text" id="room" class="form-control" readonly="true"/>
+							<p class="help-block" style="font-style: italic;">按正常流程<a id="setroom" href="#">查询一次寝室电量</a>进行设置</p>
+						</div>
+					</p>
+					<p class="help-block" style="margin-top: 20px">MISC</p>
+					<hr>
+					<p>
+						<div class="form-group" style="width:50%">
+							<label for="showReserver">显示研习室预约者姓名</label>
+							<div class="input-group">
+								<input class="tgl tgl-input" id="showReserver" type="checkbox">
+								<label class="tgl-btn" for="showReserver"></label>
+							</div>
+						</div>
+					</p>
 					<button id="save" type="button" class="btn btn-primary" style="float:right;padding-right:20px;padding-left:20px">保存</button>
 				</form>
 			</div>
