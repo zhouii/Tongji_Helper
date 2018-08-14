@@ -100,7 +100,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 	if (window.location.host=="4m3.tongji.edu.cn") {
 		if (window.location.href.indexOf("StdElectCourse!batchOperator.action")>0) {
 			if ($('html').html().indexOf('成功')>0) {
-				$('table').after('<iframe src="https://www.zhouii.com/tj_helper/elected.html" style="border: none;width: 100%;height: 800px;"></iframe>');
+				$('table').after('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="6753584008"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><iframe src="https://www.zhouii.com/tj_helper/elected.html" style="border: none;width: 100%;height: 800px;"></iframe>');
 				chrome.runtime.sendMessage({'target':'bg','action':'electSucceed','c':$('table').html()});
 			}
 			else setTimeout(refre,((items['interval']==null || items['interval']=='')?1500:items['interval']));
@@ -138,6 +138,14 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		var room=/房间\s*(\S*)\s*剩余/.exec($('html').html())[1];
 		chrome.storage.local.set({room:room,setroom:0});
 		chrome.runtime.sendMessage({'target':'bg','action':'setRoomSucceed','room':room});
+	}
+
+	if (window.location.host=='cwc.tongji.edu.cn') {
+		if (window.location.pathname=='/payment/pay/payment.jsp') {
+			$('table:first').remove();
+			$('form').css('height','100%');
+			$('#ext-gen13').css('overflow-y','auto');
+		}
 	}
 
 	if (window.location.host=='dl.reg.163.com') {//163邮箱自动登录
