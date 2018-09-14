@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "Tongji Helper",
-  "description": "能自动登录同济的各种网站，还有邮箱登录、选课辅助、评教辅助等功能(⊙v⊙)~",
-  "version": "1.11.1",
+  "description": "能自动登录同济的各种网站，还有邮箱登录、选课辅助、评教辅助、电费提醒等功能(⊙v⊙)~",
+  "version": "1.11.2",
 
   "browser_action": {
     "default_icon": "img/icon.png",

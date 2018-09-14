@@ -114,7 +114,8 @@ function checkelec() {
 			return;
 		}
 		$.ajax({type:'POST',url:"http://202.120.163.129:88/Default.aspx",data:items['elec_request'],timeout:3000,success:function(res) {
-			elecbalance=/orange">(\S*)</.exec(res)[1];
+			elecbalance=parseFloat(/orange">(\S*)</.exec(res)[1]);
+			console.log('Electricity balance checked ('+elecbalance+') on '+new Date());
 			chrome.storage.local.set({elec_lastcheck:today});
 			chrome.storage.local.get(['elec_threshold','room'],function (items) {
 				var elec_threshold=(items['elec_threshold']==null||items['elec_threshold']=='')?20:items['elec_threshold'];

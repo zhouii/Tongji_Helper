@@ -83,7 +83,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 				return;
 			}
 			insertBS();
-			$('tbody:last tr:eq(1)').after('<tr><td colspan="4"><h4 align="center">Tongji Helper 帮你点好了鼠标(⊙_⊙)~</h4></td></tr>');
+			$('tbody:last tr:eq(1)').after('<tr><td colspan="4"><h4 align="center">Tongji Helper 帮你点好了鼠标(⊙v⊙)~</h4></td></tr>');
 			$('tbody:last tr:eq(-3) td').prepend('<center><div class="btn-group-vertical" role="group"><button type="button" class="btn btn-success" id="yj1">讲课生动，课堂气氛活跃，很优秀的老师</button><button type="button" class="btn btn-primary" id="yj2">上课总体很好，只有一小点美中不足</button><button type="button" class="btn btn-info" id="yj3">课堂质量一般，有待改进</button><button type="button" class="btn btn-warning" id="yj4">这种课听了像没听一样</button><button type="button" class="btn btn-danger" id="yj5">渣滓一个！这种人待在同济是同济之耻</button></div></center>');
 			$('#yj1').click(function (){$('#yj').html($('#yj1').html());$('input[type=radio][value=A]').prop('checked',true);});
 			$('#yj2').click(function (){$('#yj').html($('#yj2').html());$('input[type=radio][value=B]').prop('checked',true);});
@@ -94,6 +94,28 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		}
 
 		if (window.location.href.indexOf('cjcx.jsp')>0) $('body').stop().animate({scrollTop: $(window).height()},800);
+
+		if (window.location.href.indexOf('question1.jsp')>0) {//http://xuanke.tongji.edu.cn/tj_shijianjx/bylwzqjc/question1.jsp?
+			$('tbody:last tr:eq(1)').after('<tr><td colspan="5"><h3 align="center">Tongji Helper 帮你点好了鼠标(⊙v⊙)~</h3></td></tr>');
+			$('[name^="chk"]').each(function(){$(this).prop('name','CHK_'+$(this).prop('value'));});
+			$('[name="c_1"][value=5]').prop('checked',true);
+			$('[name="c_2"][value=4]').prop('checked',true);
+			$('[name="c_3"][value=4]').prop('checked',true);
+			$('[name="c_4"][value=4]').prop('checked',true);
+			$('[name="CHK_9"][value=9]').prop('checked',true);
+			$('[name="c_6"][value=4]').prop('checked',true);
+			$('[name="c_7"][value=4]').prop('checked',true);
+			$('[name="c_8"][value=3]').prop('checked',true);
+			$('[name="c_9"][value=3]').prop('checked',true);
+			$('[name="c_10"][value=4]').prop('checked',true);
+			$('[name="c_11"][value=4]').prop('checked',true);
+			$('[name="c_12"][value=4]').prop('checked',true);
+			$('[name="c_13"][value=3]').prop('checked',true);
+			$('[name="c_14"][value=4]').prop('checked',true);
+			$('[name="c_15"][value=4]').prop('checked',true);
+			$('[name="c_16"][value=2]').prop('checked',true);
+			$('[name="c_note1"]').html('希望让同学们自愿选择，而不是像这次问卷一样不填就没法查成绩强奸同学们的意志');
+		}
 		
 	}
 	
@@ -195,9 +217,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		chrome.storage.local.get(['enable','status','showReserver'],function (items) {
 			if (!items['enable'] || items['status']!='allow' || !items['showReserver']) return;
 			$.ajax({url:request.url+'&c=1',timeout:3000,success:function (res) {
-				$('div.cld-occupy').css('font-size','16px');
+				$('div.cld-occupy').css('font-size','15px');
 				res=JSON.parse(res).data;
-				for (var i in res) for (var j in res[i].ts) $('div.cld-list-qzs>div:eq('+i+')>div.cld-occupy:eq('+j+')').html(res[i].ts[j].owner);
+				for (var i in res) for (var j in res[i].ts) $('div.cld-list-qzs>div:eq('+i+')>div.cld-occupy:eq('+j+')').html(res[i].ts[j].owner).attr('accno',res[i].ts[j].accno).css('padding-top','8px');
+				$('div.cld-list-qzs>div>div.cld-occupy').each(function(){
+					$.ajax({type:'get',url:'http://lib.tongji.edu.cn/yxxj/ClientWeb/pro/ajax/data/searchAccount.aspx?type=&&term='+$(this).html(),success:function(res){
+						res=JSON.parse(res);
+						for (var i in res) $('[accno="'+res[i].id+'"]').html($('[accno="'+res[i].id+'"]').html()+'-'+res[i].szLogonName);
+					}});
+				});
 			}});
 		});
 	}
