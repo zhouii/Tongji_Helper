@@ -40,7 +40,8 @@ function success(tip,onhidden) {
 	$('#success').on('hidden.bs.modal', onhidden);
 }
 function insertBS(){
-	$('head').append('<link href="'+chrome.runtime.getURL('css/bootstrap.min.css')+'" rel="stylesheet"><link href="'+chrome.runtime.getURL('css/mystyle.css')+'" rel="stylesheet"><script src="'+chrome.runtime.getURL('js/bootstrap.min.js')+'"></script>');
+	$('head').append('<link href="'+chrome.runtime.getURL('css/bootstrap.min.css')+'" rel="stylesheet"><link href="'+chrome.runtime.getURL('css/mystyle.css')+'" rel="stylesheet"><script src="'+chrome.runtime.getURL('js/jquery-3.1.1.min.js')+'"></script>');
+	setTimeout(function(){$('head').append('<script src="'+chrome.runtime.getURL('js/bootstrap.min.js')+'"></script>')},100);
 }
 function myeval(evalstr) {
 	$('body').append('<script>'+evalstr+'</script>');
