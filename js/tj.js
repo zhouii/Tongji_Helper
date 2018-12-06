@@ -168,7 +168,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		chrome.runtime.sendMessage({'target':'bg','action':'setRoomSucceed','room':room});
 	}
 
-	if (window.location.host=='cwc.tongji.edu.cn') {
+	if (window.location.host=='paycwc.tongji.edu.cn') {
 		if (window.location.pathname=='/payment/pay/payment.jsp') {
 			$('table:first').remove();
 			$('form').css('height','100%');

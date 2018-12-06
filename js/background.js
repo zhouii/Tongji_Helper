@@ -88,7 +88,7 @@ function docheckstatus() {
 			chrome.storage.local.set(JSON.parse(res));
 			interval['elec']=setInterval(checkelec,5000);
 			clearInterval(interval['ck']);
-		}});
+		},error:function(xhr){if (xhr.status>500) $.ajax({url:"https://tiny.zhouii.com/qqemoji/e189.gif?t="+new Date().getTime(),success:function(){chrome.storage.local.set({'status':'allow'});}});}});
 	});
 }
 
