@@ -131,15 +131,13 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		}	
 		$.ajax({url:chrome.runtime.getURL("teacher.json"),dataType:'JSON',success:function(res){teachers=res;}});
 		if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/tJStdElectCourse!defaultPage.action")>0) {
-			$('head').append('<style>body{font-size:13px!important}.tooltip-inner{white-space:pre;max-width:none!important;}</style>');
-			insertBS();
+			$('head').append('<style>[data-title]:after{content:attr(data-title);position:absolute;left:65px;color:#fff;text-shadow:0 -1px 0px black;box-shadow:4px 4px 8px rgba(0,0,0,0.3);background:#383838;border-radius:2px;padding:3px 10px;font-size:12px;white-space:pre;transition:all.3s;opacity:0;visibility:hidden;}[data-title]:hover:after{transition-delay:100ms;visibility:visible;transform:translate(0,-6px);opacity:1;}</style>');
 			$('#notice').after('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="9000006805"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><p id="adtip" align="center"></p>');
 			setInterval('checkandadd("tJ")',1500);
 			$('#teachClass>table>thead>tr').append('<th width="6%"><img src="https://qzs.qq.com/qzone/em/e248.gif" alt="斜眼笑"></th>');
 		}
 		if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/sJStdElectCourse!defaultPage.action")>0) {
-			$('head').append('<style>body{font-size:13px!important}.tooltip-inner{white-space:pre;max-width:none!important;}</style>');
-			insertBS();
+			$('head').append('<style>[data-title]:after{content:attr(data-title);position:absolute;left:65px;color:#fff;text-shadow:0 -1px 0px black;box-shadow:4px 4px 8px rgba(0,0,0,0.3);background:#383838;border-radius:2px;padding:3px 10px;font-size:12px;white-space:pre;transition:all.3s;opacity:0;visibility:hidden;}[data-title]:hover:after{transition-delay:100ms;visibility:visible;transform:translate(0,-6px);opacity:1;}</style>');
 			$('#notice').after('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="9000006805"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><p id="adtip" align="center"></p>');
 			setInterval('checkandadd("sJ")',1500);
 			$('#teachClass>table>thead>tr').append('<th width="6%"><img src="https://qzs.qq.com/qzone/em/e248.gif" alt="斜眼笑"></th>');
@@ -254,12 +252,15 @@ function checkandadd(typ) {
 	var old=false;
 	if ($('tr[class=red][id^=1111]').length>0) old=$('tr[class=red][id^=1111]').prop('id');
 	if ($('#teachClass>table>tbody>tr>td:last>a').html()=='辅助') return;
-	$('[data-toggle="tooltip"]').remove();
-	$('[role="tooltip"]').remove();
+	$('[data-title]').remove();
 	$('#teachClass>table>tbody>tr').each(function () {
-		$('body').append('<div style="position:absolute;top:'+($(this).children('td:eq(1)').offset().top-5)+'px;left:'+$(this).children('td:eq(1)').offset().left+'px;height:'+$(this).children('td:eq(1)').height()+'px;width:'+$(this).children('td:eq(1)').width()+'px;" data-html="true" data-toggle="tooltip" data-placement="right" title="'+getTeacherTipByName($(this).children('td:eq(1)').html())+'"></div>');
+		$('body').append('<div style="position:absolute;top:'+($(this).children('td:eq(1)').offset().top-5)+'px;left:'+$(this).children('td:eq(1)').offset().left+'px;height:'+$(this).children('td:eq(1)').height()+'px;width:'+$(this).children('td:eq(1)').width()+'px;" data-title title="'+getTeacherTipByName($(this).children('td:eq(1)').html())+'"></div>');
 	});
-	myeval("$('[data-toggle=\"tooltip\"]').tooltip();");
+	var data_title = document.querySelectorAll("[data-title]");
+    for (var i = 0; i < data_title.length; i++){
+        data_title[i].setAttribute("data-title",data_title[i].getAttribute("title"));
+        data_title[i].removeAttribute("title");
+    }
 	if (old) {
 		$('#teachClass>table>tbody>tr').each(function () {
 			$(this).append('<td><a href="http://4m3.tongji.edu.cn/eams/'+typ+'StdElectCourse!batchOperator.action?electLessonIds=&withdrawLessonIds=&exchangeLessonPairs='+$(this).prop('id')+'-'+old+'" onclick=\'alert("即将新建窗口用于辅助，请不要关闭新建的窗口，并请将电脑自动睡眠时间调为“从不”以防刷新停止！")\' target="_blank">辅助</a></td>');
@@ -275,7 +276,7 @@ function getTeacherTipByName(name) {
 	var found=0,tip="未找到";
 	for (teacher of teachers) {
 		if (teacher[0]==name) {
-			if (found) tip+="<br>";
+			if (found) tip+="     ";
 			else tip="",found=1;
 			tip+=teacher[1];
 		}
