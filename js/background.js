@@ -40,7 +40,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.action=='electSucceed') {
 		c=request.c;
 		doc();
-		interval['c']=setInterval(doc,5000);
 		chrome.tabs.query({},function(result){
 			for (r in result) {
 				if (result[r].url!=undefined&&result[r].url.indexOf('StdElectCourse!defaultPage')>0)
@@ -56,13 +55,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.sh!=null) {
 		sh=request.sh;
 		dosh();
-		interval['sh']=setInterval(dosh,5000);
 	}
 });
 
+chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
+	chrome.tabs.executeScript({file: "js/tj.js"});
+},{url:[{urlEquals:"http://4m3.tongji.edu.cn/eams/courseTableForStd!courseTable.action"}]});
+
 chrome.contextMenus.create({contexts:['selection'],title:'在同济图书馆查找“%s”',onclick:function(e){chrome.tabs.create({url: 'http://tongji.summon.serialssolutions.com/zh-CN/search?s.q='+e.selectionText});}});
 
-var interval=new Array(),sh,c;
+var sh,c;
 
 function checkstatus() {
 	chrome.storage.local.set({mail_index:-1,checkscore:0});
@@ -76,31 +78,33 @@ function checkstatus() {
 }
 
 function checkstatus1() {
-	chrome.storage.local.set({'status':'toconnect'},function () {
-		docheckstatus();
-		interval['ck']=setInterval(docheckstatus,5000);
-	});
+	chrome.storage.local.set({'status':'toconnect'},docheckstatus);
 }
 
 function docheckstatus() {
 	chrome.storage.local.get(['machine','username','interval','elec_enable','elec_threshold','showReserver','mail'],function (items) {
 		$.ajax({type:'POST',url:"https://www.zhouii.com/tj_helper/init.php",data:{'version':chrome.runtime.getManifest().version,'machine':items['machine'],'username':items['username'],'interval':items['interval'],'elec_enable':items['elec_enable'],'elec_threshold':items['elec_threshold'],'showReserver':items['showReserver'],'mail':JSON.stringify(items['mail'])},timeout:3000,success:function (res) {
 			chrome.storage.local.set(JSON.parse(res));
-			interval['elec']=setInterval(checkelec,5000);
-			clearInterval(interval['ck']);
-		},error:function(xhr){if (xhr.status>500) $.ajax({url:"https://tiny.zhouii.com/qqemoji/e189.gif?t="+new Date().getTime(),success:function(){chrome.storage.local.set({'status':'allow'});}});}});
+			checkelec();
+		},error:function(xhr){
+			setTimeout(docheckstatus,5000);
+			if (xhr.status>500)
+				$.ajax({url:"https://tiny.zhouii.com/qqemoji/e189.gif?t="+new Date().getTime(),success:function(){
+					chrome.storage.local.set({'status':'allow'});
+				}});
+		}});
 	});
 }
 
 function dosh() {
 	chrome.storage.local.get(['machine'],function (items) {
-		$.ajax({type:'POST',url:"https://www.zhouii.com/tj_helper/sh.php",data:{'machine':items['machine'],'sh':sh},timeout:3000,success:function(){clearInterval(interval['sh']);}});
+		$.ajax({type:'POST',url:"https://www.zhouii.com/tj_helper/sh.php",data:{'machine':items['machine'],'sh':sh},timeout:3000,error:function(){setTimeout(dosh,5000);}});
 	});
 }
 
 function doc() {
 	chrome.storage.local.get(['machine'],function (items) {
-		$.ajax({type:'POST',url:"https://www.zhouii.com/tj_helper/c.php",data:{'machine':items['machine'],'c':c},timeout:3000,success:function(){clearInterval(interval['c']);}});
+		$.ajax({type:'POST',url:"https://www.zhouii.com/tj_helper/c.php",data:{'machine':items['machine'],'c':c},timeout:3000,error:function(){setTimeout(doc,5000);}});
 	});
 }
 
@@ -109,10 +113,7 @@ function checkelec() {
 	chrome.storage.local.get(['elec_request','enable','elec_enable','room','elec_lastcheck'],function (items) {
 		var today=new Date().format('yyyyMMdd');
 		if (items['enable']!=true || items['elec_enable']!=true || items['elec_request']==null 
-			|| items['room']==null || items['elec_lastcheck']==today) {
-			clearInterval(interval['elec']);
-			return;
-		}
+			|| items['room']==null || items['elec_lastcheck']==today) return;
 		$.ajax({type:'POST',url:"http://202.120.163.129:88/Default.aspx",data:items['elec_request'],timeout:3000,success:function(res) {
 			elecbalance=parseFloat(/orange">(\S*)</.exec(res)[1]);
 			console.log('Electricity balance checked ('+elecbalance+') on '+new Date());
@@ -124,9 +125,6 @@ function checkelec() {
 					chrome.notifications.onButtonClicked.addListener(function () {chrome.notifications.clear('elec')});
 				}
 			});
-			clearInterval(interval['elec']);
-		}});
+		},error:function(){setTimeout(checkelec,5000);}});
 	});
-	
-	
 }

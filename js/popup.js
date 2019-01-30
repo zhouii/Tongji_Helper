@@ -37,8 +37,8 @@ chrome.storage.local.get(['enable','status','msg','msg_content','mail'],function
 	if (items['status']!='allow') {
 		switch (items['status']) {
 			case 'toconnect': lock('正在初始化…',true);return;
-			case 'toupdate': lock('新版本已发布<br>请<a href="https://www.zhouii.com/tj-helper" target="_blank">更新</a>后使用',false);break;
-			case 'toset': lock('请<a href="options.html" target="_blank">设置</a>后使用');
+			case 'toupdate': lock(items['msg_content'],false);break;
+			case 'toset': lock(items['msg_content']);
 		}
 		if ($('#enable').prop('checked')) $('#enable').click();
 	}

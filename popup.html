@@ -11,23 +11,33 @@
 </head>
 <body>
 	<div id="waiting"><h3></h3><img src="img/pending.gif" align="center" /></div>
-	<div style="width: 300px; padding: 10px; ">
-		<div align="center">
-			<img src="img/icon.png" height="80px"/>
-			<h2>Tongji Helper</h2>
-		</div>
-		<p style="color: rgb(115, 119, 122); font-size: 14px;">超威蓝猫制作的同济助手浏览器插件，不仅能自动登录，还有更多功能自己探索去→_→</p>
+	<div style="width: 350px; padding: 15px; ">
+		<table style="margin-bottom: 15px;">
+			<tr>
+				<td style="width: 100px">
+					<img src="img/icon.png" style="height: 80px" />
+				</td>
+				<td>
+					<h2 style="margin-top: 5px">Tongji Helper</h2>
+					<p style="color: rgb(115, 119, 122); font-size: 14px;">超威蓝猫制作的同济助手浏览器插件，不仅能自动登录，还有更多功能自己探索去→_→</p>
+				</td>
+			</tr>
+		</table>
 		<div id="alert-green" class="alert alert-success" style="display:none"></div>
 		<div id="alert-blue" class="alert alert-info" style="display:none"></div>
 		<div id="alert-yellow" class="alert alert-warning" style="display:none"></div>
 		<div id="alert-red" class="alert alert-danger" style="display:none"></div>
-		<div style="display: flex;">
-			<div style="flex: 1; padding-top:8px"><label for='enable'>启用插件</label></div>
-			<div style="flex: 1">
-				<input class='tgl tgl-input' id='enable' type='checkbox'>
-				<label class='tgl-btn' for='enable'></label>
-			</div>
-		</div>
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 50%;text-align: center;">
+					<label for='enable'>启用插件</label>
+				</td>
+				<td style="width: 50%">
+					<input class='tgl tgl-input' id='enable' type='checkbox'>
+					<label class='tgl-btn' for='enable' style="margin: auto;"></label>
+				</td>
+			</tr>
+		</table>
 		<hr/>
 		<div align="center">
 			<div class="btn-group">
@@ -37,7 +47,6 @@
 		<hr/>
 		<div class="row" style="text-align: center;">
 			<div class="col-xs-12"><button type="button" id="checkscore" class="btn btn-info" data-url="http://xuanke.tongji.edu.cn/">来查成绩！！</button></div> 
-			<!--<div class="col-xs-6"><a type="button" class="btn btn-info" href="tool.html" target="_blank">实用小工具</a></div>-->
 		</div>
 		<hr/>
 		<div style="text-align: center;margin-bottom: 20px">
@@ -69,7 +78,8 @@
 				</div>
 			</p>
 		</div>
-		<p style="color: rgb(115, 119, 122); font-size: 12px;">Copyright ©2018 <a href="https://www.zhouii.com/tj-helper" target="_blank">Zhouii</a></p>
+		<p style="color: rgb(115, 119, 122); font-size: 12px;">如有帮助，到<a href="https://github.com/zhouii/Tongji_Helper" target="_blank">GitHub页面</a>给此项目加个star是最大的支持</p>
+		<p style="color: rgb(115, 119, 122); font-size: 10px;">Copyright ©2019 By <a href="https://www.zhouii.com/" target="_blank">Zhouii</a><a href="https://www.zhouii.com/tj-helper" target="_blank" style="float: right;">意见反馈</a></p>
 	</div>
 	<script src="js/popup.js"></script>
 </body>

@@ -72,7 +72,6 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 			$('font[size="-1"]').hide();
 			setTimeout(function(){
 				if (items['checkscore']==1) {
-					chrome.storage.local.set({checkscore:0});
 					myeval("open11('01','/tj_xuankexjgl/score/query/student/cjcx.jsp?qxid=20051013779916&mkid=20051013779901','20051013779916','null','null');");
 				}
 			},800);
@@ -95,28 +94,9 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 			$('input[type=radio][value=A]').prop('checked',true);
 		}
 
-		if (window.location.href.indexOf('cjcx.jsp')>0) $('body').stop().animate({scrollTop: $(window).height()},800);
-
-		if (window.location.href.indexOf('question1.jsp')>0) {//http://xuanke.tongji.edu.cn/tj_shijianjx/bylwzqjc/question1.jsp?
-			$('tbody:last tr:eq(1)').after('<tr><td colspan="5"><h3 align="center">Tongji Helper 帮你点好了鼠标(⊙v⊙)~</h3></td></tr>');
-			$('[name^="chk"]').each(function(){$(this).prop('name','CHK_'+$(this).prop('value'));});
-			$('[name="c_1"][value=5]').prop('checked',true);
-			$('[name="c_2"][value=4]').prop('checked',true);
-			$('[name="c_3"][value=4]').prop('checked',true);
-			$('[name="c_4"][value=4]').prop('checked',true);
-			$('[name="CHK_9"][value=9]').prop('checked',true);
-			$('[name="c_6"][value=4]').prop('checked',true);
-			$('[name="c_7"][value=4]').prop('checked',true);
-			$('[name="c_8"][value=3]').prop('checked',true);
-			$('[name="c_9"][value=3]').prop('checked',true);
-			$('[name="c_10"][value=4]').prop('checked',true);
-			$('[name="c_11"][value=4]').prop('checked',true);
-			$('[name="c_12"][value=4]').prop('checked',true);
-			$('[name="c_13"][value=3]').prop('checked',true);
-			$('[name="c_14"][value=4]').prop('checked',true);
-			$('[name="c_15"][value=4]').prop('checked',true);
-			$('[name="c_16"][value=2]').prop('checked',true);
-			$('[name="c_note1"]').html('希望让同学们自愿选择，而不是像这次问卷一样不填就没法查成绩强奸同学们的意志');
+		if (window.location.href.indexOf('cjcx.jsp')>0 && items['checkscore']==1) {
+			$('body').stop().animate({scrollTop: $(window).height()},800);
+			chrome.storage.local.set({checkscore:0});
 		}
 		
 	}
@@ -130,38 +110,27 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 			else setTimeout(refre,((items['interval']==null || items['interval']=='')?1500:items['interval']));
 		}	
 		$.ajax({url:chrome.runtime.getURL("teacher.json"),dataType:'JSON',success:function(res){teachers=res;}});
+		$('head').append('<style>[data-title]:after{content:attr(data-title);position:absolute;text-align:left;transform:translate(10px);color:#fff;text-shadow:0 -1px 0px black;box-shadow:4px 4px 8px rgba(0,0,0,0.3);background:#383838;border-radius:2px;padding:3px 10px;font-size:12px;white-space:pre;transition:all.3s;opacity:0;visibility:hidden;}[data-title]:hover:after{transition-delay:100ms;visibility:visible;transform:translate(10px,-6px);opacity:1;}</style>');
 		if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/tJStdElectCourse!defaultPage.action")>0) {
-			$('head').append('<style>[data-title]:after{content:attr(data-title);position:absolute;left:65px;color:#fff;text-shadow:0 -1px 0px black;box-shadow:4px 4px 8px rgba(0,0,0,0.3);background:#383838;border-radius:2px;padding:3px 10px;font-size:12px;white-space:pre;transition:all.3s;opacity:0;visibility:hidden;}[data-title]:hover:after{transition-delay:100ms;visibility:visible;transform:translate(0,-6px);opacity:1;}</style>');
 			$('#notice').after('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="9000006805"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><p id="adtip" align="center"></p>');
 			setInterval('checkandadd("tJ")',1500);
 			$('#teachClass>table>thead>tr').append('<th width="6%"><img src="https://qzs.qq.com/qzone/em/e248.gif" alt="斜眼笑"></th>');
 		}
 		if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/sJStdElectCourse!defaultPage.action")>0) {
-			$('head').append('<style>[data-title]:after{content:attr(data-title);position:absolute;left:65px;color:#fff;text-shadow:0 -1px 0px black;box-shadow:4px 4px 8px rgba(0,0,0,0.3);background:#383838;border-radius:2px;padding:3px 10px;font-size:12px;white-space:pre;transition:all.3s;opacity:0;visibility:hidden;}[data-title]:hover:after{transition-delay:100ms;visibility:visible;transform:translate(0,-6px);opacity:1;}</style>');
 			$('#notice').after('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="9000006805"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><p id="adtip" align="center"></p>');
 			setInterval('checkandadd("sJ")',1500);
 			$('#teachClass>table>thead>tr').append('<th width="6%"><img src="https://qzs.qq.com/qzone/em/e248.gif" alt="斜眼笑"></th>');
 		}
-		myeval("window.onpopstate=function(){\
-			if (window.location.href.indexOf('courseTableForStd!courseTable.action')>0 && $('input[value=切换学期]').next().length==0) {\
-				$('input[value=切换学期]').after('<a href=\"javascript:void(0);\" style=\"margin-left:10px\" onclick=\"javascript:$(\\\'#semesterCalendar_target\\\').val($(\\\'#semesterCalendar_target\\\').val()-1+2);$(\\\'input[value=切换学期]\\\').click();\">下一学期</a>');\
-				$('input[value=切换学期]').after('<a href=\"javascript:void(0);\" style=\"margin-left:10px\" onclick=\"javascript:$(\\\'#semesterCalendar_target\\\').val($(\\\'#semesterCalendar_target\\\').val()-1);$(\\\'input[value=切换学期]\\\').click();\">上一学期</a>');\
-				$('input[value=切换]').after('<a href=\"javascript:void(0);\" style=\"margin-left:10px\" onclick=\"javascript:$(\\\'#semesterCalendar_target\\\').val($(\\\'#semesterCalendar_target\\\').val()-1+2);$(\\\'input[value=切换]\\\').click();\">下一学期</a>');\
-				$('input[value=切换]').after('<a href=\"javascript:void(0);\" style=\"margin-left:10px\" onclick=\"javascript:$(\\\'#semesterCalendar_target\\\').val($(\\\'#semesterCalendar_target\\\').val()-1);$(\\\'input[value=切换]\\\').click();\">上一学期</a>');\
-			}\
-		}");
+		if (window.location.href.indexOf('courseTableForStd!courseTable.action')>0 && $('input[value=切换学期]').next().length==0) {
+			$('input[value=切换学期]').after('<a href="javascript:void(0);" style="margin-left:10px" onclick="javascript:$(\'#semesterCalendar_target\').val($(\'#semesterCalendar_target\').val()-1+2);$(\'input[value=切换学期]\').click();">下一学期</a>');
+			$('input[value=切换学期]').after('<a href="javascript:void(0);" style="margin-left:10px" onclick="javascript:$(\'#semesterCalendar_target\').val($(\'#semesterCalendar_target\').val()-1);$(\'input[value=切换学期]\').click();">上一学期</a>');
+			$('.grid>table>tbody>tr').find('td:eq(7)').each(function(){$(this).attr('data-title',getTeacherTipByName($(this).html()))});
+			$('#contentDiv').append('<p>Tip：鼠标移到教师姓名看详情，可通过 工号@tongji.edu.cn 联系教师。——Tongji Helper</p>');
+		}
 	}
 
-	if (window.location.host=='xui.ptlogin2.qq.com' && window.location.href.indexOf('mail.qq.com')) {//qq邮箱自动登录
-		if (!items['mail'][items['mail_index']].mail.endsWith('@qq.com') && !items['mail'][items['mail_index']].mail.endsWith('@foxmail.com')) return;
-		chrome.storage.local.set({mail_index:-1});
-		$('#u').val(items['mail'][items['mail_index']].mail);
-		$('#p').val(items['mail'][items['mail_index']].pswd);
-		$('#login_button').click();
-	}
-
-	if ((window.location.href=='http://202.120.163.129:88/buyRecord.aspx' || window.location.href=='http://202.120.163.129:88/usedRecord.aspx')&&items['setroom']) {
-		var room=/房间\s*(\S*)\s*剩余/.exec($('html').html())[1];
+	if ((window.location.href.includes('http://202.120.163.129:88/buyRecord') || window.location.href.includes('http://202.120.163.129:88/usedRecord'))&&items['setroom']) {
+		var room=/<h6>.*?(\d*)\s*?剩余/.exec($('html').html())[1];
 		chrome.storage.local.set({room:room,setroom:0});
 		chrome.runtime.sendMessage({'target':'bg','action':'setRoomSucceed','room':room});
 	}
@@ -172,6 +141,14 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 			$('form').css('height','100%');
 			$('#ext-gen13').css('overflow-y','auto');
 		}
+	}
+
+	if (window.location.host=='xui.ptlogin2.qq.com' && window.location.href.indexOf('mail.qq.com')) {//qq邮箱自动登录
+		if (!items['mail'][items['mail_index']].mail.endsWith('@qq.com') && !items['mail'][items['mail_index']].mail.endsWith('@foxmail.com')) return;
+		chrome.storage.local.set({mail_index:-1});
+		$('#u').val(items['mail'][items['mail_index']].mail);
+		$('#p').val(items['mail'][items['mail_index']].pswd);
+		$('#login_button').click();
 	}
 
 	if (window.location.host=='dl.reg.163.com') {//163邮箱自动登录
@@ -252,15 +229,10 @@ function checkandadd(typ) {
 	var old=false;
 	if ($('tr[class=red][id^=1111]').length>0) old=$('tr[class=red][id^=1111]').prop('id');
 	if ($('#teachClass>table>tbody>tr>td:last>a').html()=='辅助') return;
-	$('[data-title]').remove();
 	$('#teachClass>table>tbody>tr').each(function () {
-		$('body').append('<div style="position:absolute;top:'+($(this).children('td:eq(1)').offset().top-5)+'px;left:'+$(this).children('td:eq(1)').offset().left+'px;height:'+$(this).children('td:eq(1)').height()+'px;width:'+$(this).children('td:eq(1)').width()+'px;" data-title title="'+getTeacherTipByName($(this).children('td:eq(1)').html())+'"></div>');
+		var td=$(this).children('td:eq(1)');
+		td.attr('data-title',getTeacherTipByName(td.html()));
 	});
-	var data_title = document.querySelectorAll("[data-title]");
-    for (var i = 0; i < data_title.length; i++){
-        data_title[i].setAttribute("data-title",data_title[i].getAttribute("title"));
-        data_title[i].removeAttribute("title");
-    }
 	if (old) {
 		$('#teachClass>table>tbody>tr').each(function () {
 			$(this).append('<td><a href="http://4m3.tongji.edu.cn/eams/'+typ+'StdElectCourse!batchOperator.action?electLessonIds=&withdrawLessonIds=&exchangeLessonPairs='+$(this).prop('id')+'-'+old+'" onclick=\'alert("即将新建窗口用于辅助，请不要关闭新建的窗口，并请将电脑自动睡眠时间调为“从不”以防刷新停止！")\' target="_blank">辅助</a></td>');
@@ -276,7 +248,7 @@ function getTeacherTipByName(name) {
 	var found=0,tip="未找到";
 	for (teacher of teachers) {
 		if (teacher[0]==name) {
-			if (found) tip+="     ";
+			if (found) tip+="\n\r";
 			else tip="",found=1;
 			tip+=teacher[1];
 		}
