@@ -104,7 +104,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 	if (window.location.host=="4m3.tongji.edu.cn") {
 		if (window.location.href.indexOf("StdElectCourse!batchOperator.action")>0) {
 			if ($('html').html().indexOf('成功')>0) {
-				$('table').after('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="6753584008"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><iframe src="https://www.zhouii.com/tj_helper/elected.html" style="border: none;width: 100%;height: 800px;"></iframe>');
+				$('table').after('<iframe src="https://www.zhouii.com/tj_helper/elected.html" style="border: none;width: 100%;height: 800px;"></iframe>');
 				chrome.runtime.sendMessage({'target':'bg','action':'electSucceed','c':$('table').html()});
 			}
 			else setTimeout(refre,((items['interval']==null || items['interval']=='')?1500:items['interval']));
@@ -112,7 +112,6 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		$.ajax({url:chrome.runtime.getURL("teacher.json"),dataType:'JSON',success:function(res){teachers=res;}});
 		$('head').append('<style>[data-title]:after{content:attr(data-title);position:absolute;text-align:left;transform:translate(10px);color:#fff;text-shadow:0 -1px 0px black;box-shadow:4px 4px 8px rgba(0,0,0,0.3);background:#383838;border-radius:2px;padding:3px 10px;font-size:12px;white-space:pre;transition:all.3s;opacity:0;visibility:hidden;}[data-title]:hover:after{transition-delay:100ms;visibility:visible;transform:translate(10px,-6px);opacity:1;}</style>');
 		if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/tJStdElectCourse!defaultPage.action")>0) {
-			$('#notice').after('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle"     style="display:block"     data-ad-client="ca-pub-4798098153916731"     data-ad-slot="9000006805"     data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><p id="adtip" align="center"></p>');
 			setInterval('checkandadd("tJ")',1500);
 			$('#teachClass>table>thead>tr').append('<th width="6%"><img src="https://qzs.qq.com/qzone/em/e248.gif" alt="斜眼笑"></th>');
 		}
@@ -126,6 +125,10 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 			$('input[value=切换学期]').after('<a href="javascript:void(0);" style="margin-left:10px" onclick="javascript:$(\'#semesterCalendar_target\').val($(\'#semesterCalendar_target\').val()-1);$(\'input[value=切换学期]\').click();">上一学期</a>');
 			$('.grid>table>tbody>tr').find('td:eq(7)').each(function(){$(this).attr('data-title',getTeacherTipByName($(this).html()))});
 			$('#contentDiv').append('<p>Tip：鼠标移到教师姓名看详情，可通过 工号@tongji.edu.cn 联系教师。——Tongji Helper</p>');
+		}
+		if (window.location.href=='http://4m3.tongji.edu.cn/eams/courseTableForStd!allTextBook.action') {
+			$('tbody tr>td:last-child').each(function(){$(this).html('<a href="http://webpac.lib.tongji.edu.cn/opac/openlink.php?isbn='+$(this).html()+'&series=&callno=&keyword=&year=&doctype=ALL&lang_code=ALL&displaypg=20&showmode=list&sort=CATA_DATE&orderby=desc&location=ALL&with_ebook=on" target="_blank">'+$(this).html()+'</a>');});
+			$('table').after('<p>Tip：单击书号可查看图书馆馆藏情况。——Tongji Helper</p>');
 		}
 	}
 
@@ -222,10 +225,6 @@ function refre() {
 }
 
 function checkandadd(typ) {
-	if ($('ins').html()=='') {
-		$('#adtip').html('我做插件也很辛苦啊。。免费开源的插件就靠广告赚点微小的外快。。我辅助你选课你还屏蔽我的广告你忍心吗<img src="https://qzs.qq.com/qzone/em/e150.gif"><br>辅助按钮将在广告加载完成后显示');
-		return;
-	} else $('#adtip').html('');
 	var old=false;
 	if ($('tr[class=red][id^=1111]').length>0) old=$('tr[class=red][id^=1111]').prop('id');
 	if ($('#teachClass>table>tbody>tr>td:last>a').html()=='辅助') return;
