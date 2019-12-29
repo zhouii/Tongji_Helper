@@ -139,7 +139,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 	}
 
 	if (window.location.host=='paycwc.tongji.edu.cn') {
-		if (window.location.pathname=='/payment/pay/payment.jsp') {
+		if (window.location.pathname.indexOf('/payment/pay/payment.jsp')==0) {
 			$('table:first').remove();
 			$('form').css('height','100%');
 			$('#ext-gen13').css('overflow-y','auto');
@@ -214,6 +214,30 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		});
 	}
 	if (request.action=='refresh') window.location.reload();
+	if (request.action=='addElectButton') {
+		chrome.storage.local.get(['enable','status'],function (items) {
+			if (!items['enable'] || items['status']!='allow') return;
+			attrname=Object.keys($('.el-col-13 .head').data())[0];
+			$.ajax({url:request.url+'&c=1',type:'post',timeout:3000,success:function (res) {
+				if ($('.el-col-13 .head :last-child[ico]').length==0)
+					$('.el-col-13 .head').append('<td data-'+attrname+' ico><img src="https://qzs.qq.com/qzone/em/e248.gif"></td>');
+				courses={};
+				for (index in res.data) {
+					$('[id^=data]:eq('+index+')').append('<td data-'+attrname+'><button courseid="'+res.data[index].teachClassId+'" class="el-button el-button--small" style="padding: 9px 5px;margin: 0 2px;">辅助</button></td>');
+					courses[res.data[index].teachClassId]=res.data[index];
+				}
+				$('button[courseid]').click(function(){
+					if ($('#data-tr').length>0) {
+						myeval('vueApp.showMsgBox({message:"退课后可辅助选课——Tongji Helper"})');
+						return;
+					}
+					chrome.runtime.sendMessage({'target':'bg','action':'addSup','course':courses[$(this).attr('courseid')]});
+				});
+			}});
+		});
+	}
+	if (request.action=='refreshCourseTable')
+		myeval('vueApp.$children[0].$children[0].$children[2].$children[1].$children[0].$children[0].$children[0].getData()');
 });
 
 if (window.location.host=="xuanke.tongji.edu.cn" && window.location.href.indexOf("o.jsp")>0) chrome.runtime.sendMessage({'target':'bg','sh':$('td[nowrap]').html()});

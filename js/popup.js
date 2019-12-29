@@ -32,7 +32,7 @@ var v=new Vue({
 		}
 	}
 });
-chrome.storage.local.get(['enable','status','msg','msg_content','mail'],function (items) {
+chrome.storage.local.get(['enable','status','msg','msg_content','mail','electsuping'],function (items) {
 	$('#enable').prop("checked", items['enable']==true?true:false);
 	if (items['status']!='allow') {
 		switch (items['status']) {
@@ -46,6 +46,7 @@ chrome.storage.local.get(['enable','status','msg','msg_content','mail'],function
 	v.mails=items['mail'];
 	$('[data-url]').click(function(){chrome.tabs.create({url:$(this).data('url')});});
 	$('#checkscore').click(function(){chrome.storage.local.set({checkscore:1});});
+	if (items['electsuping']) {$('#electsuptip').show();}
 });
 
 $('#enable').change(function() {

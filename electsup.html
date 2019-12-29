@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>选课辅助详情</title>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/mystyle.css" rel="stylesheet">
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/vue.js"></script>
+</head>
+<body style="background: #f1f1f1;"><div id="body">
+	<div style="max-width: 800px; padding: 10px; margin:auto ">
+		<p style="text-align:center; margin:20px"><img src="img/icon.png" height="100px" /></p>
+		<div id="tip" class="alert alert-info" style="width:200px;margin:10px auto;text-align: center;">{{statusdict[status]}}</div>
+		<div id="errtip" class="alert alert-danger" style="width:500px;margin:10px auto;text-align: center;" v-if="hasfail">
+			<p v-for="(msg,key) of failmsg">【{{msg}}】{{key}}</p>
+		</div>
+		<p class="help-block">辅助过程中可关闭此页面，只需保持浏览器运行即可。可随时点击右上角<img src="img/icon.png" style="width: 18px;" />图标打开此页面关注选课进程。</p>
+		<div class="panel panel-default" v-for="course of courses">
+			<div class="panel-body">
+				<button type="button" class="btn btn-default" style="float: right;" @click="deleteSup(course.teachClassId)"><span class="glyphicon glyphicon-remove"></span></button>
+				<h3 class="panel-title" style="line-height: 33.3px;">{{course.teachClassCode}}&emsp;{{course.courseName}}&emsp;{{course.teacherName}}</h3>
+			</div>
+			<div class="panel-footer">
+				<div v-if="course.finish">
+					<iframe src="https://www.zhouii.com/tj_helper/elected.html" style="border: none;width: 100%;height: 200px;"></iframe>
+				</div>
+				<div v-else>辅助中</div>
+			</div>
+		</div>
+		<p class="help-block">对新教务系统的辅助可能还存在bug，欢迎<a href="https://github.com/zhouii/Tongji_Helper/issues" target="_blank">在GitHub提Issue</a>或<a href="https://www.zhouii.com/tj-helper" target="_blank">在评论区反馈问题</a></p>
+	</div>
+	<script src="js/electsup.js"></script>
+</div></body>
+</html>

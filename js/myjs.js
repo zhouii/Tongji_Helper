@@ -50,7 +50,7 @@ Date.prototype.format = function(fmt) {
 	var o = { 
 		"M+" : this.getMonth()+1,
 		"d+" : this.getDate(), //日 
-		"H+": this.getHours()%12, //小时 
+		"H+": this.getHours(), //小时 
 		"m+": this.getMinutes(), //分 
 		"s+": this.getSeconds(), //秒 
 		"S": this.getMilliseconds() //毫秒
