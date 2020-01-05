@@ -12,10 +12,11 @@
 <body style="background: #f1f1f1;"><div id="body">
 	<div style="max-width: 800px; padding: 10px; margin:auto ">
 		<p style="text-align:center; margin:20px"><img src="img/icon.png" height="100px" /></p>
-		<div id="tip" class="alert alert-info" style="width:200px;margin:10px auto;text-align: center;">{{statusdict[status]}}</div>
+		<div id="tip" :class="tipclass" style="width:200px;margin:10px auto;text-align: center;">{{statusdict[status]}}</div>
 		<div id="errtip" class="alert alert-danger" style="width:500px;margin:10px auto;text-align: center;" v-if="hasfail">
 			<p v-for="(msg,key) of failmsg">【{{msg}}】{{key}}</p>
 		</div>
+		<p v-if="status=='p'" style="text-align: center;"><button type="button" class="btn btn-success" @click="startSup">重新开始</button></p>
 		<p class="help-block">辅助过程中可关闭此页面，只需保持浏览器运行即可。可随时点击右上角<img src="img/icon.png" style="width: 18px;" />图标打开此页面关注选课进程。</p>
 		<div class="panel panel-default" v-for="course of courses">
 			<div class="panel-body">

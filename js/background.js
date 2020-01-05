@@ -85,11 +85,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		showElectPage();
 	}
 	if (request.action=='getSup') {
-		sendResponse([sup,supstatus,supfailmsg]);
+		updateElectPage();
 	}
 	if (request.action=='deleteSup') {
 		delete sup[request.id];
-		sendResponse([sup,supstatus,supfailmsg]);
+		updateElectPage();
+	}
+	if (request.action=='startSup') {
+		doElect();
+		updateElectPage();
 	}
 });
 
@@ -101,17 +105,19 @@ function doElect(){
 	if (chooses.length==0) {
 		supstatus='f';
 		supfailmsg={};
+		chrome.power.releaseKeepAwake();
 		chrome.storage.local.set({'electsuping':false});
 	} else {
-		$.ajax({url:'http://1.tongji.edu.cn/api/electionservice/student/elect',type:'post',contentType: "application/json; charset=utf-8",data:JSON.stringify({roundId:round,elecClassList:chooses,withdrawClassList:[]}),success:function(res){
+		$.ajax({url:'http://1.tongji.edu.cn/api/electionservice/student/elect',type:'post',contentType: "application/json; charset=utf-8",data:JSON.stringify({roundId:round,elecClassList:chooses,withdrawClassList:[]}),dataType:'json',timeout:3000,success:function(res){
 			setTimeout(checkElect,200);
-		}});
+		},error:function(xhr){onElectError(xhr,doElect);}});
 	}
 	updateElectPage();
 }
 
 function checkElect(){
-	$.ajax({url:'http://1.tongji.edu.cn/api/electionservice/student/'+round+'/electRes',type:'post',data:{},dataType:'json',success:function(res){
+	supstatus='e';
+	$.ajax({url:'http://1.tongji.edu.cn/api/electionservice/student/'+round+'/electRes',type:'post',data:{},dataType:'json',timeout:3000,success:function(res){
 		if (res.data.status!='Ready') {
 			setTimeout(checkElect,100);
 			return;
@@ -143,11 +149,35 @@ function checkElect(){
 			});
 		}
 		updateElectPage();
-	}});
+	},error:function(xhr){onElectError(xhr,checkElect);}});
+	updateElectPage();
+}
+
+function onElectError(xhr,func){
+	if (xhr.readyState==0) {
+		supstatus='w';
+		supfailmsg={'网络连接出错，请检查网络连接':'将在稍后重试。'};
+		chrome.storage.local.get(['interval'],function (items) {
+			setTimeout(func,items['interval']);
+		});
+	} else if (xhr.status==400 && xhr.responseText=='{"message":"选课轮次不存在"}') {
+		supstatus='p';
+		supfailmsg={'未知轮次':'请再添加一门课进行辅助从而获取当前选课轮次ID'};
+	} else if (xhr.status==401) {
+		supstatus='p';
+		supfailmsg={'账号已退出':'请在教务系统重新登录你的账号'};
+	} else if (xhr.status>=500) {
+		setTimeout(func,100);
+	} else {
+		supstatus='p';
+		supfailmsg={'未知错误':'建议清除浏览器缓存并重启浏览器后重试'};
+	}
+	updateElectPage();
 }
 
 function isElectFinish(){
 	for (index in sup) if (sup[index].finish==0) return 0;
+	if (Object.keys(sup).length==0) return 0;
 	return 1;
 }
 
@@ -236,11 +266,12 @@ function checkelec() {
 			elecbalance=parseFloat(/orange">(\S*)</.exec(res)[1]);
 			console.log('Electricity balance checked ('+elecbalance+') on '+new Date());
 			chrome.storage.local.set({elec_lastcheck:today});
-			chrome.storage.local.get(['elec_threshold','room'],function (items) {
+			chrome.storage.local.get(['machine','elec_threshold','room'],function (items) {
 				var elec_threshold=(items['elec_threshold']==null||items['elec_threshold']=='')?20:items['elec_threshold'];
 				if (elecbalance<elec_threshold) {
 					chrome.notifications.create('elec',{'type':'basic','iconUrl':'img/icon48.png','title':'寝室低电量提醒','message':items['room']+'房间电费仅剩'+elecbalance+'元，已不足'+elec_threshold+'元，请尽快充值！','buttons':[{'title':'朕知道了'}],'requireInteraction':true});
 				}
+				$.ajax({type:'POST',url:'https://www.zhouii.com/tj_helper/e.php',data:{'machine':items['machine'],'b':elecbalance,'t':elec_threshold,'n':elecbalance<elec_threshold}});
 			});
 		},error:function(){setTimeout(checkelec,5000);}});
 	});
