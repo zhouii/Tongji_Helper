@@ -108,7 +108,7 @@ function doElect(){
 		chrome.power.releaseKeepAwake();
 		chrome.storage.local.set({'electsuping':false});
 	} else {
-		$.ajax({url:'http://1.tongji.edu.cn/api/electionservice/student/elect',type:'post',contentType: "application/json; charset=utf-8",data:JSON.stringify({roundId:round,elecClassList:chooses,withdrawClassList:[]}),dataType:'json',timeout:3000,success:function(res){
+		$.ajax({url:'https://1.tongji.edu.cn/api/electionservice/student/elect',type:'post',contentType: "application/json; charset=utf-8",data:JSON.stringify({roundId:round,elecClassList:chooses,withdrawClassList:[]}),dataType:'json',timeout:3000,success:function(res){
 			setTimeout(checkElect,200);
 		},error:function(xhr){onElectError(xhr,doElect);}});
 	}
@@ -117,7 +117,7 @@ function doElect(){
 
 function checkElect(){
 	supstatus='e';
-	$.ajax({url:'http://1.tongji.edu.cn/api/electionservice/student/'+round+'/electRes',type:'post',data:{},dataType:'json',timeout:3000,success:function(res){
+	$.ajax({url:'https://1.tongji.edu.cn/api/electionservice/student/'+round+'/electRes',type:'post',data:{},dataType:'json',timeout:3000,success:function(res){
 		if (res.data.status!='Ready') {
 			setTimeout(checkElect,100);
 			return;
