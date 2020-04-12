@@ -145,6 +145,10 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 			$('#ext-gen13').css('overflow-y','auto');
 		}
 	}
+    
+    if(window.location.href=="https://courses.tongji.edu.cn/sign-in"){//同济大学云课堂自动登录跳转
+        $(".login-btn").click();
+    }
 
 	if (window.location.host=='xui.ptlogin2.qq.com' && window.location.href.indexOf('mail.qq.com')) {//qq邮箱自动登录
 		if (!items['mail'][items['mail_index']].mail.endsWith('@qq.com') && !items['mail'][items['mail_index']].mail.endsWith('@foxmail.com')) return;
