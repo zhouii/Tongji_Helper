@@ -145,10 +145,16 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 			$('#ext-gen13').css('overflow-y','auto');
 		}
 	}
-    
-    if(window.location.href=="https://courses.tongji.edu.cn/sign-in"){//同济大学云课堂自动登录跳转
-        $(".login-btn").click();
-    }
+
+	if (window.location.href=="https://courses.tongji.edu.cn/sign-in") {//同济大学云课堂自动登录跳转
+		$(".login-btn").click();
+	}
+
+	if (window.location.href.indexOf('https://idp2.tongji.edu.cn/idp/profile/SAML2/Redirect/SSO')==0 && $('.form-error').length==0) {//CARSI教育网统一认证
+		$('#username').val(items['username']==null?"":items['username']);
+		$('#password').val(items['password']==null?"":items['password']);
+		$('button[type="submit"]').click().prop('disabled',true);
+	}
 
 	if (window.location.host=='xui.ptlogin2.qq.com' && window.location.href.indexOf('mail.qq.com')) {//qq邮箱自动登录
 		if (!items['mail'][items['mail_index']].mail.endsWith('@qq.com') && !items['mail'][items['mail_index']].mail.endsWith('@foxmail.com')) return;
@@ -166,7 +172,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		setTimeout(function(){myeval("var ev = document.createEvent('KeyboardEvent');\
 		ev.initKeyboardEvent('keyup', true, true, window);\
 		Object.defineProperty(ev,'keyCode',{get : function() {return this.keyCodeVal;}}); \
-        ev.keyCodeVal=13;\
+		ev.keyCodeVal=13;\
 		document.getElementsByName('password')[0].dispatchEvent(ev);");},500);
 	}
 
@@ -178,7 +184,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		setTimeout(function(){myeval("var ev = document.createEvent('KeyboardEvent');\
 		ev.initKeyboardEvent('keyup', true, true, window);\
 		Object.defineProperty(ev,'keyCode',{get : function() {return this.keyCodeVal;}}); \
-        ev.keyCodeVal=13;\
+		ev.keyCodeVal=13;\
 		document.getElementsByName('password')[0].dispatchEvent(ev);");},500);
 	}
 
