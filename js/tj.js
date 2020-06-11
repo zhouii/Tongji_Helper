@@ -150,6 +150,21 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		$(".login-btn").click();
 	}
 
+	if (window.location.href.indexOf('https://cdc.tongji.edu.cn/jweb/jyfx/wsdc/dywj.bo')==0) {
+		$('p.title2').after('<h2 style="text-align:center;">反对强制问卷强奸用户体验！Tongji Helper帮你填好了整张问卷，如果你想自己填也可以<button type="button" onclick="javascript:$(\'input:not(:submit)\').val(\'\').attr(\'checked\',false);$(\'textarea\').val(\'\');">清空</button>后自己填</h2>');
+		$('input:radio').click();
+		$('input:text').val('5').blur();
+		var checks=new Set();
+		$('input:checkbox,.pxtbtn').each(function(){
+			checks.add($(this).attr('name'));
+		});console.log(checks);
+		for (var check of checks) {
+			$('input[name='+check+']:last').click();
+		}
+		$('textarea').val('建议不要强制填写问卷才能继续填写毕业去向，会造成反感！');
+		$(window).scrollTop(0);
+	}
+
 	if (window.location.href.indexOf('https://idp2.tongji.edu.cn/idp/profile/SAML2/Redirect/SSO')==0 && $('.form-error').length==0) {//CARSI教育网统一认证
 		$('#username').val(items['username']==null?"":items['username']);
 		$('#password').val(items['password']==null?"":items['password']);
