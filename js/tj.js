@@ -108,8 +108,7 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 				chrome.runtime.sendMessage({'target':'bg','action':'electSucceed','c':$('table').html()});
 			}
 			else setTimeout(refre,((items['interval']==null || items['interval']=='')?1500:items['interval']));
-		}	
-		$.ajax({url:chrome.runtime.getURL("teacher.json"),dataType:'JSON',success:function(res){teachers=res;}});
+		}
 		$('head').append('<style>[data-title]:after{content:attr(data-title);position:absolute;text-align:left;transform:translate(10px);color:#fff;text-shadow:0 -1px 0px black;box-shadow:4px 4px 8px rgba(0,0,0,0.3);background:#383838;border-radius:2px;padding:3px 10px;font-size:12px;white-space:pre;transition:all.3s;opacity:0;visibility:hidden;}[data-title]:hover:after{transition-delay:100ms;visibility:visible;transform:translate(10px,-6px);opacity:1;}</style>');
 		if (window.location.href.indexOf("4m3.tongji.edu.cn/eams/tJStdElectCourse!defaultPage.action")>0) {
 			setInterval('checkandadd("tJ")',1500);
@@ -123,8 +122,6 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		if (window.location.href.indexOf('courseTableForStd!courseTable.action')>0 && $('input[value=切换学期]').next().length==0) {
 			$('input[value=切换学期]').after('<a href="javascript:void(0);" style="margin-left:10px" onclick="javascript:$(\'#semesterCalendar_target\').val($(\'#semesterCalendar_target\').val()-1+2);$(\'input[value=切换学期]\').click();">下一学期</a>');
 			$('input[value=切换学期]').after('<a href="javascript:void(0);" style="margin-left:10px" onclick="javascript:$(\'#semesterCalendar_target\').val($(\'#semesterCalendar_target\').val()-1);$(\'input[value=切换学期]\').click();">上一学期</a>');
-			$('.grid>table>tbody>tr').find('td:eq(7)').each(function(){$(this).attr('data-title',getTeacherTipByName($(this).html()))});
-			$('#contentDiv').append('<p>Tip：鼠标移到教师姓名看详情，可通过 工号@tongji.edu.cn 联系教师。——Tongji Helper</p>');
 		}
 		if (window.location.href=='http://4m3.tongji.edu.cn/eams/courseTableForStd!allTextBook.action') {
 			$('tbody tr>td:last-child').each(function(){$(this).html('<a href="http://webpac.lib.tongji.edu.cn/opac/openlink.php?isbn='+$(this).html()+'&series=&callno=&keyword=&year=&doctype=ALL&lang_code=ALL&displaypg=20&showmode=list&sort=CATA_DATE&orderby=desc&location=ALL&with_ebook=on" target="_blank">'+$(this).html()+'</a>');});
@@ -277,10 +274,6 @@ function checkandadd(typ) {
 	var old=false;
 	if ($('tr[class=red][id^=1111]').length>0) old=$('tr[class=red][id^=1111]').prop('id');
 	if ($('#teachClass>table>tbody>tr>td:last>a').html()=='辅助') return;
-	$('#teachClass>table>tbody>tr').each(function () {
-		var td=$(this).children('td:eq(1)');
-		td.attr('data-title',getTeacherTipByName(td.html()));
-	});
 	if (old) {
 		$('#teachClass>table>tbody>tr').each(function () {
 			$(this).append('<td><a href="http://4m3.tongji.edu.cn/eams/'+typ+'StdElectCourse!batchOperator.action?electLessonIds=&withdrawLessonIds=&exchangeLessonPairs='+$(this).prop('id')+'-'+old+'" onclick=\'alert("即将新建窗口用于辅助，请不要关闭新建的窗口，并请将电脑自动睡眠时间调为“从不”以防刷新停止！")\' target="_blank">辅助</a></td>');
@@ -292,14 +285,3 @@ function checkandadd(typ) {
 	}
 }
 
-function getTeacherTipByName(name) {
-	var found=0,tip="未找到";
-	for (teacher of teachers) {
-		if (teacher[0]==name) {
-			if (found) tip+="\n\r";
-			else tip="",found=1;
-			tip+=teacher[1];
-		}
-	}
-	return tip;
-}
