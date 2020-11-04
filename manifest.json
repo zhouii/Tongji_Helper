@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.tongji.edu.cn/*","http://192.168.192.10/*","http://192.168.192.17/*","http://192.168.192.18/*","*://xui.ptlogin2.qq.com/*","*://dl.reg.163.com/*","*://passport.126.com/*","*://passport.alibaba.com/*","*://202.120.163.129/*"],
-      "js": ["js/jquery-3.1.1.min.js", "js/myjs.js","js/tj.js"],
+      "js": ["js/jquery-3.1.1.min.js", "js/myjs.js","js/tj.js", "js/captcha/captcha.js", "js/captcha/jimp.js", "js/captcha/tf.min.js"],
       "all_frames": true,
       "match_about_blank": true, 
       "run_at": "document_idle"
@@ -53,6 +53,8 @@
     "js/bootstrap.min.js",
     "js/jquery-3.1.1.min.js",
     "teacher.json",
-    "fonts/*"
+    "fonts/*",
+    "js/captcha/model/model.json",
+    "js/captcha/model/weights.bin"
   ]
 }

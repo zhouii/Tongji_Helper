@@ -46,6 +46,9 @@ function insertBS(){
 function myeval(evalstr) {
 	$('body').append('<script>'+evalstr+'</script>');
 }
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
 Date.prototype.format = function(fmt) { 
 	var o = { 
 		"M+" : this.getMonth()+1,
