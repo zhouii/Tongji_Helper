@@ -11,12 +11,29 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 	}
 
 	if (items['status']!='allow') return;
-	
-	if (window.location.host=="ids.tongji.edu.cn:8443" && window.location.href.indexOf("option=credential")>0) {//统一身份认证
-		$('#username').val(items['username']==null?"":items['username']);
-		$('#password').val(items['password']==null?"":items['password']);
-		$('form').submit();
-		$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
+
+	let isPwdFailed = $('#error').text().includes("密码错误");
+	if (window.location.host=="ids.tongji.edu.cn:8443" && !isPwdFailed) { //统一身份认证
+		$('#username').val(items['username'] == null ? "" : items['username']).hide();
+		$('#password').val(items['password'] == null ? "" : items['password']).hide();
+		let $codeImg = $('#codeImg');
+		$('body > div').hide();
+		$('body').append('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
+		setTimeout(() => {
+			let attr = $codeImg.attr("src");
+			// 设置了一个最大尝试次数，避免网络原因导致验证码完全加载不出来的情况
+			const attemptCount = 99999;
+			for (let i = 0; i < attemptCount; i++) {
+				attr = $codeImg.attr("src");
+				if (!(attr === undefined || attr === "#")) {
+					break;
+				}
+			}
+			processAndPredict(attr).then(v => {
+				$('#Txtidcode').val(v);
+				$('form').trigger("submit");
+			});
+		}, 10);
 	}
 	
 	if (window.location.host=="lib.tongji.edu.cn") {
