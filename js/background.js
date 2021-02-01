@@ -219,7 +219,23 @@ function checkstatus1() {
 }
 
 function docheckstatus() {
-	chrome.storage.local.get(['machine','username','interval','elec_enable','elec_threshold','showReserver','mail'],function (items) {
+	chrome.storage.local.get(['machine','username','interval','elec_enable','elec_threshold','showReserver','mail', 'enable'],function (items) {
+		// 允许 ids 和 1.tongji 嵌入
+		chrome.webRequest.onHeadersReceived.addListener(details => {
+			if (items['enable']) {
+				let headers = details.responseHeaders;
+				for (let i = 0; i < headers.length; i++) {
+					if (headers[i].name === 'X-FRAME-OPTIONS') {
+						headers.splice(i, 1);
+						break;
+					}
+				}
+				return {responseHeaders: headers};
+			}
+		}, {urls: ["*://*.tongji.edu.cn/*"]}, ["blocking", "responseHeaders"]);
+		addIdsIframe();
+		checkCourseUpdate();
+
 		$.ajax({type:'POST',url:"https://www.zhouii.com/tj_helper/init.php",data:{'version':chrome.runtime.getManifest().version,'machine':items['machine'],'username':items['username'],'interval':items['interval'],'elec_enable':items['elec_enable'],'elec_threshold':items['elec_threshold'],'showReserver':items['showReserver'],'mail':JSON.stringify(items['mail'])},timeout:3000,success:function (res) {
 			chrome.storage.local.set(JSON.parse(res));
 			checkelec();
@@ -276,6 +292,98 @@ function checkelec() {
 		},error:function(){setTimeout(checkelec,5000);}});
 	});
 }
+
+function addIdsIframe() {
+	const elementId = "background_ids";
+	chrome.storage.local.get(['enable'], items => {
+		if (items['enable']) {
+			// 如果原先存在，视作session失效，移除后重新授权
+			$(`#${elementId}`).remove();
+			// 可重定向至1.tongji的url
+			$('body').append(`<iframe src="https://ids.tongji.edu.cn:8443/nidp/oauth/nam/authz?scope=profile&response_type=code&redirect_uri=https%3A%2F%2F1.tongji.edu.cn%2Fapi%2Fssoservice%2Fsystem%2FloginIn&client_id=5fcfb123-b94d-4f76-89b8-475f33efa194" id="${elementId}"></iframe>`);
+		}
+	});
+}
+
+function checkCourseUpdate() {
+	setInterval(() => {
+		chrome.storage.local.get("course_update_enable", items => {
+			if (items["course_update_enable"] == null || items["course_update_enable"]) {
+				console.log(`${new Date()} 开始一轮课程成绩更新监测...`);
+				let settings = {
+					"method": "POST",
+					// mock 地址
+					// "url": "https://fucktj.mtage.top/mock/api/scoremanagementservice/studentScoreQuery/listMyScorePage",
+					// "url": "http://localhost:8099/mock/api/scoremanagementservice/studentScoreQuery/listMyScorePage",
+					"url": "https://1.tongji.edu.cn/api/scoremanagementservice/studentScoreQuery/listMyScorePage",
+					// 获取全部课程数据，想必不会有人修超过300门课...
+					"data": '{"pageNum_":1,"pageSize_":300,"condition":{}}',
+					"headers": {
+						"Content-Type": "application/json;charset=UTF-8",
+					},
+				};
+
+				$.ajax(settings).done(response => {
+					// console.log(response);
+					if (!response["code"] || response["code"] !== 200) {
+						// 请求失败，视作session失效，尝试刷新授权
+						addIdsIframe();
+						return;
+					}
+					let courseInfoStorageKey = "last_course";
+					chrome.storage.local.get([courseInfoStorageKey], lastCourseItems => {
+						let lastCourseResponse = lastCourseItems[courseInfoStorageKey];
+						chrome.storage.local.set({"last_course": response});
+						if (lastCourseResponse === undefined) {
+							// 初次加载课程数据
+							return;
+						}
+						let diff = compareCourseData(lastCourseResponse, response);
+						if (diff.length > 0) {
+							diff.forEach(eachDif => {
+								let notiStr = `您的课程成绩有更新！${eachDif["courseName"]} 成绩 ${eachDif["totalMarkScore"]}`;
+								chrome.notifications.create('elec', {
+									'type': 'basic',
+									'iconUrl': 'img/icon48.png', 'title': '课程成绩更新提醒',
+									'message': notiStr,
+									'buttons': [{'title': '朕知道了'}],
+									'requireInteraction': true
+								});
+							})
+						}
+					})
+				});
+			}
+		})
+	}, 5000);
+}
+
+// 比较两次请求课程成绩的差异，返回新更新的课程数据
+function compareCourseData(lastResponse, response) {
+	let result = [];
+	// console.log(lastResponse);
+	// console.log(response);
+	if (lastResponse["data"]["total"] === response["data"]["total"]) {
+		return result;
+	}
+	let lastResponseCourseMap = new Map(lastResponse["data"]["list"].map(c => [getCourseUniqKey(c), c]));
+	let responseCourseMap = new Map(response["data"]["list"].map(c => [getCourseUniqKey(c), c]));
+	// console.log(lastResponseCourseMap);
+	// console.log(responseCourseMap);
+	responseCourseMap.forEach(((value, key) => {
+		if (!lastResponseCourseMap.has(key)) {
+			result = result.concat(value);
+		}
+	}))
+	return result;
+}
+
+function getCourseUniqKey(course) {
+	// 通过calendarId兼容重修情况
+	return `${course["courseCode"]}:${course["calendarId"]}`;
+}
+
+
 chrome.notifications.onButtonClicked.addListener(function (notificationId) {
 	chrome.notifications.clear(notificationId);
 });
