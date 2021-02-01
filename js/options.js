@@ -6,6 +6,7 @@ chrome.storage.local.get(['username','password','enable','interval','showReserve
 	$('#elec_enable').prop('checked',items['elec_enable']==null?false:items['elec_enable']);
 	$('#elec_threshold').val(items['elec_threshold']);
 	$('#room').val(items['room']);
+	$('#course_update_enable').prop('checked',items['course_update_enable']==null?false:items['course_update_enable']);
 });
 
 $('#save').click(save);
@@ -16,7 +17,7 @@ $('#setroom').click(function () {
 });
 
 function save () {
-	chrome.storage.local.set({'username':$('#username').val(),'password':$('#password').val(),'interval':parseInt($('#interval').val()),'showReserver':$('#showReserver').prop('checked'),'elec_enable':$('#elec_enable').prop('checked'),'elec_threshold':$('#elec_threshold').val(),'enable':true,'status':'toconnect'},function() {
+	chrome.storage.local.set({'username':$('#username').val(),'password':$('#password').val(),'interval':parseInt($('#interval').val()),'showReserver':$('#showReserver').prop('checked'),'elec_enable':$('#elec_enable').prop('checked'),'elec_threshold':$('#elec_threshold').val(),'course_update_enable':$('#course_update_enable').val(),'enable':true,'status':'toconnect'},function() {
 		chrome.runtime.sendMessage({'target':'bg','action':'checkstatus'});
 		$('#tip').html('保存成功~').fadeIn().delay(2000).fadeOut();
 	});
