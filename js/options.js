@@ -6,7 +6,8 @@ chrome.storage.local.get(['username','password','enable','interval','showReserve
 	$('#elec_enable').prop('checked',items['elec_enable']==null?false:items['elec_enable']);
 	$('#elec_threshold').val(items['elec_threshold']);
 	$('#room').val(items['room']);
-	$('#course_update_enable').prop('checked',items['course_update_enable']==null?false:items['course_update_enable']);
+	// 默认是开启的
+	$('#course_update_enable').prop('checked',items['course_update_enable']==null?true:items['course_update_enable']);
 });
 
 $('#save').click(save);

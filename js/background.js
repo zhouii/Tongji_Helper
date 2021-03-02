@@ -225,9 +225,10 @@ function docheckstatus() {
 			if (items['enable']) {
 				let headers = details.responseHeaders;
 				for (let i = 0; i < headers.length; i++) {
-					if (headers[i].name === 'X-FRAME-OPTIONS') {
+					if (headers[i].name.toUpperCase() === 'X-FRAME-OPTIONS') {
 						headers.splice(i, 1);
-						break;
+						// 神奇的ids每个response会有多个同名的header字段...
+						// break;
 					}
 				}
 				return {responseHeaders: headers};
@@ -307,8 +308,8 @@ function addIdsIframe() {
 
 function checkCourseUpdate() {
 	setInterval(() => {
-		chrome.storage.local.get("course_update_enable", items => {
-			if (items["course_update_enable"] == null || items["course_update_enable"]) {
+		chrome.storage.local.get(["enable", "course_update_enable"], items => {
+			if (items["enable"] && (items["course_update_enable"] == null || items["course_update_enable"])) {
 				console.log(`${new Date()} 开始一轮课程成绩更新监测...`);
 				let settings = {
 					"method": "POST",
@@ -323,36 +324,40 @@ function checkCourseUpdate() {
 					},
 				};
 
-				$.ajax(settings).done(response => {
-					// console.log(response);
-					if (!response["code"] || response["code"] !== 200) {
+				$.ajax(settings)
+					.fail((xhr, textStatus) => {
 						// 请求失败，视作session失效，尝试刷新授权
+						console.log(`request failed xhr.status ${xhr.status} text=${textStatus}`);
 						addIdsIframe();
-						return;
-					}
-					let courseInfoStorageKey = "last_course";
-					chrome.storage.local.get([courseInfoStorageKey], lastCourseItems => {
-						let lastCourseResponse = lastCourseItems[courseInfoStorageKey];
-						chrome.storage.local.set({"last_course": response});
-						if (lastCourseResponse === undefined) {
-							// 初次加载课程数据
+					})
+					.done((response, textStatus, xhr) => {
+						if (!response["code"] || response["code"] !== 200) {
+							addIdsIframe();
 							return;
 						}
-						let diff = compareCourseData(lastCourseResponse, response);
-						if (diff.length > 0) {
-							diff.forEach(eachDif => {
-								let notiStr = `您的课程成绩有更新！${eachDif["courseName"]} 成绩 ${eachDif["totalMarkScore"]}`;
-								chrome.notifications.create('elec', {
-									'type': 'basic',
-									'iconUrl': 'img/icon48.png', 'title': '课程成绩更新提醒',
-									'message': notiStr,
-									'buttons': [{'title': '朕知道了'}],
-									'requireInteraction': true
-								});
-							})
-						}
-					})
-				});
+						let courseInfoStorageKey = "last_course";
+						chrome.storage.local.get([courseInfoStorageKey], lastCourseItems => {
+							let lastCourseResponse = lastCourseItems[courseInfoStorageKey];
+							chrome.storage.local.set({"last_course": response});
+							if (lastCourseResponse === undefined) {
+								// 初次加载课程数据
+								return;
+							}
+							let diff = compareCourseData(lastCourseResponse, response);
+							if (diff.length > 0) {
+								diff.forEach(eachDif => {
+									let notiStr = `您的课程成绩有更新！${eachDif["courseName"]} 成绩 ${eachDif["totalMarkScore"]}`;
+									chrome.notifications.create('elec', {
+										'type': 'basic',
+										'iconUrl': 'img/icon48.png', 'title': '课程成绩更新提醒',
+										'message': notiStr,
+										'buttons': [{'title': '朕知道了'}],
+										'requireInteraction': true
+									});
+								})
+							}
+						})
+					});
 			}
 		})
 	}, 5000);
