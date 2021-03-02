@@ -347,7 +347,7 @@ function checkCourseUpdate() {
 							if (diff.length > 0) {
 								diff.forEach(eachDif => {
 									let notiStr = `您的课程成绩有更新！${eachDif["courseName"]} 成绩 ${eachDif["totalMarkScore"]}`;
-									chrome.notifications.create('elec', {
+									chrome.notifications.create('newscore', {
 										'type': 'basic',
 										'iconUrl': 'img/icon48.png', 'title': '课程成绩更新提醒',
 										'message': notiStr,
@@ -360,7 +360,7 @@ function checkCourseUpdate() {
 					});
 			}
 		})
-	}, 5000);
+	}, 180000);
 }
 
 // 比较两次请求课程成绩的差异，返回新更新的课程数据

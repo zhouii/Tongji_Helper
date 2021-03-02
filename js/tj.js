@@ -258,7 +258,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		chrome.storage.local.get(['enable','status'],function (items) {
 			if (!items['enable'] || items['status']!='allow') return;
 			attrname=Object.keys($('.el-col-13 .head').data())[0];
-			$.ajax({url:request.url+'&c=1',type:'post',timeout:3000,success:function (res) {
+			$.ajax({url:request.url+'&c=1',type:'post',timeout:0,success:function (res) {
 				if ($('.el-col-13 .head :last-child[ico]').length==0)
 					$('.el-col-13 .head').append('<td data-'+attrname+' ico><img src="https://qzs.qq.com/qzone/em/e248.gif"></td>');
 				courses={};
