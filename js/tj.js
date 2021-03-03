@@ -269,7 +269,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 				$('button[courseid]').click(function(){
 
                         if ($('#data-tr').length > 0) {
-                            console.log("改课");
+                          //  console.log("改课");
                             chrome.runtime.sendMessage({
                                 'target': 'bg',
                                 'action': 'addSup',
