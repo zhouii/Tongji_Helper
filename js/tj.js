@@ -267,12 +267,23 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 					courses[res.data[index].teachClassId]=res.data[index];
 				}
 				$('button[courseid]').click(function(){
-					if ($('#data-tr').length>0) {
-						myeval('vueApp.showMsgBox({message:"退课后可辅助选课——Tongji Helper"})');
-						return;
-					}
-					chrome.runtime.sendMessage({'target':'bg','action':'addSup','course':courses[$(this).attr('courseid')]});
-				});
+
+                        if ($('#data-tr').length > 0) {
+                            console.log("改课");
+                            chrome.runtime.sendMessage({
+                                'target': 'bg',
+                                'action': 'addSup',
+                                'course': courses[$(this).attr('courseid')],
+                                'delete': courses[$('#data-tr .el-button')[0].attributes["courseid"].value]
+                            });
+                        }else
+                        chrome.runtime.sendMessage({
+                            'target': 'bg',
+                            'action': 'addSup',
+                            'course': courses[$(this).attr('courseid')],
+                            'delete': {},
+                        });
+                    });
 			}});
 		});
 	}

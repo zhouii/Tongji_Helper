@@ -78,7 +78,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}
 	if (request.action=='addSup') {
 		chrome.storage.local.set({'electsuping':true});
-		sup={[request.course.teachClassId]:{start:new Date().format('yyyy/MM/dd HH:mm:ss'),...request.course,finish:0},...sup};
+		sup = {
+            [request.course.teachClassId]: {
+                start: new Date().format('yyyy/MM/dd HH:mm:ss'), ...request.course,
+                finish: 0,
+                delete: request.delete
+            }, ...sup
+        };
 		if (supstatus=='f') doElect();
 		chrome.power.requestKeepAwake('system');
 		updateElectPage();
@@ -100,18 +106,54 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function doElect(){
 	supstatus='e';
 	lastelect=Date.now();
-	var chooses=[];
-	for (id in sup) if (sup[id].finish==0) chooses.push({teachClassId:sup[id].teachClassId,teachClassCode:sup[id].teachClassCode,courseCode:sup[id].courseCode,courseName:sup[id].courseName,teacherName:sup[id].teacherName});
-	if (chooses.length==0) {
-		supstatus='f';
-		supfailmsg={};
-		chrome.power.releaseKeepAwake();
-		chrome.storage.local.set({'electsuping':false});
-	} else {
-		$.ajax({url:'https://1.tongji.edu.cn/api/electionservice/student/elect',type:'post',contentType: "application/json; charset=utf-8",data:JSON.stringify({roundId:round,elecClassList:chooses,withdrawClassList:[]}),dataType:'json',timeout:3000,success:function(res){
-			setTimeout(checkElect,200);
-		},error:function(xhr){onElectError(xhr,doElect);}});
-	}
+	var chooses = [];
+    var withdraws = [];
+    for (id in sup) {
+        if (sup[id].finish == 0) {
+
+            if (Object.keys(sup[id].delete).length !== 0)
+                withdraws.push(
+                    {
+                        teachClassId: sup[id].delete.teachClassId,
+                        teachClassCode: sup[id].delete.teachClassCode,
+                        courseCode: sup[id].delete.courseCode,
+                        courseName: sup[id].delete.courseName,
+                        teacherName: sup[id].delete.teacherName
+                    }
+                );
+            else
+                chooses.push({
+                    teachClassId: sup[id].teachClassId,
+                    teachClassCode: sup[id].teachClassCode,
+                    courseCode: sup[id].courseCode,
+                    courseName: sup[id].courseName,
+                    teacherName: sup[id].teacherName
+                });
+        }
+    }
+    if (chooses.length == 0 && withdraws.length == 0) {
+        supstatus = 'f';
+        supfailmsg = {};
+        chrome.power.releaseKeepAwake();
+        chrome.storage.local.set({'electsuping': false});
+    } else {
+
+        $.ajax({
+            url: 'https://1.tongji.edu.cn/api/electionservice/student/elect',
+            type: 'post',
+            contentType: "application/json; charset=utf-8",
+
+            data: JSON.stringify({roundId: round, elecClassList: chooses, withdrawClassList: withdraws}),
+            dataType: 'json',
+            timeout: 3000,
+            success: function (res) {
+                setTimeout(checkElect, 200);
+            },
+            error: function (xhr) {
+                onElectError(xhr, doElect);
+            }
+        });
+    }
 	updateElectPage();
 }
 
@@ -124,14 +166,26 @@ function checkElect(){
 		}
 		c1=[];
 		for (success of res.data.successCourses) {
+			var isDeleted=false;
+                for (id in sup) {
+                    //循环检查一下是不是被退的课，感觉课不太多应该不会影响效率
+                    if (sup[id].delete.teachClassId === success) {
+                        sup[id].delete = {};
+                        isDeleted=true;
+                        break;
+                    }
+                }
+                if(!isDeleted){
 			sup[success].finish=1;
 			c1.push(sup[success]);
-		}
+		}}
 		if (res.data.successCourses.length>0) {
 			chrome.tabs.query({},function(result){
 				for (r in result) {
 					if (result[r].url!=undefined&&result[r].url.indexOf('//1.tongji.edu.cn/studentElect')>0)
-						chrome.tabs.sendMessage(result[r].id,{'target':'cs','action':'refreshCourseTable'});
+					{chrome.tabs.sendMessage(result[r].id, {'target': 'cs', 'action': 'refresh'});
+					chrome.tabs.sendMessage(result[r].id,{'target':'cs','action':'refreshCourseTable'});}
+
 				}
 			});
 			doc1();
