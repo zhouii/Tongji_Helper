@@ -78,6 +78,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}
 	if (request.action=='addSup') {
 		chrome.storage.local.set({'electsuping':true});
+		if(Object.keys(request.delete).length!==0)
+		{
+			request.delete.finish=0;
+		}
 		sup = {
             [request.course.teachClassId]: {
                 start: new Date().format('yyyy/MM/dd HH:mm:ss'), ...request.course,
@@ -111,7 +115,7 @@ function doElect(){
     for (id in sup) {
         if (sup[id].finish == 0) {
 
-            if (Object.keys(sup[id].delete).length !== 0)
+            if (Object.keys(sup[id].delete).length !== 0&&sup[id].delete.finish!=1)
                 withdraws.push(
                     {
                         teachClassId: sup[id].delete.teachClassId,
@@ -170,9 +174,8 @@ function checkElect(){
                 for (id in sup) {
                     //循环检查一下是不是被退的课，感觉课不太多应该不会影响效率
                     if (sup[id].delete.teachClassId === success) {
-                        sup[id].delete = {};
+                        sup[id].delete.finish=1;
                         isDeleted=true;
-                        break;
                     }
                 }
                 if(!isDeleted){
