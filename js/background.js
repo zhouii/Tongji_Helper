@@ -116,6 +116,7 @@ function doElect(){
         if (sup[id].finish == 0) {
 
             if (Object.keys(sup[id].delete).length !== 0&&sup[id].delete.finish!=1)
+			{
                 withdraws.push(
                     {
                         teachClassId: sup[id].delete.teachClassId,
@@ -125,6 +126,14 @@ function doElect(){
                         teacherName: sup[id].delete.teacherName
                     }
                 );
+				chooses.push({
+                    teachClassId: sup[id].teachClassId,
+                    teachClassCode: sup[id].teachClassCode,
+                    courseCode: sup[id].courseCode,
+                    courseName: sup[id].courseName,
+                    teacherName: sup[id].teacherName
+                });
+			}
             else
                 chooses.push({
                     teachClassId: sup[id].teachClassId,
@@ -172,7 +181,6 @@ function checkElect(){
 		for (success of res.data.successCourses) {
 			var isDeleted=false;
                 for (id in sup) {
-                    //循环检查一下是不是被退的课，感觉课不太多应该不会影响效率
                     if (sup[id].delete.teachClassId === success) {
                         sup[id].delete.finish=1;
                         isDeleted=true;
@@ -181,7 +189,8 @@ function checkElect(){
                 if(!isDeleted){
 			sup[success].finish=1;
 			c1.push(sup[success]);
-		}}
+		}
+	}
 		if (res.data.successCourses.length>0) {
 			chrome.tabs.query({},function(result){
 				for (r in result) {
