@@ -18,7 +18,7 @@
   
   "content_scripts": [
     {
-      "matches": ["*://*.tongji.edu.cn/*","http://192.168.192.10/*","http://192.168.192.17/*","http://192.168.192.18/*","*://xui.ptlogin2.qq.com/*","*://dl.reg.163.com/*","*://passport.126.com/*","*://passport.alibaba.com/*","*://202.120.163.129/*"],
+      "matches": ["*://*.tongji.edu.cn/*","http://192.168.192.10/*","http://192.168.192.17/*","http://192.168.192.18/*","*://xui.ptlogin2.qq.com/*","*://dl.reg.163.com/*","*://passport.126.com/*","*://passport.alibaba.com/*","*://202.120.163.129/*","*://122.112.219.67/*"],
       "js": ["js/jquery-3.1.1.min.js", "js/myjs.js","js/tj.js", "js/captcha/captcha.js", "js/captcha/jimp.js", "js/captcha/tf.min.js"],
       "all_frames": true,
       "match_about_blank": true, 
@@ -31,6 +31,9 @@
   },
   
   "options_page": "options.html",
+
+  "server":"https://1.tongji.edu.cn",
+  //"server":"http://122.112.219.67:30669",
   
   "homepage_url": "https://www.zhouii.com/tj-helper",
   

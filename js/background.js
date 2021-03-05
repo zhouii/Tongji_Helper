@@ -37,7 +37,7 @@ chrome.webRequest.onCompleted.addListener(
 		round=/roundId=(\d*)/.exec(details.url)[1];
 		chrome.tabs.sendMessage(details.tabId,{'target':'cs','action':'addElectButton','url':details.url});
 	},
-	{urls: ["*://1.tongji.edu.cn/api/electionservice/student/getTeachClass4Limit*"]});
+	{urls: [chrome.runtime.getManifest().server+"/api/electionservice/student/getTeachClass4Limit*"]});
 
 chrome.webRequest.onCompleted.addListener(
 	function(details) {
@@ -152,7 +152,7 @@ function doElect(){
     } else {
 
         $.ajax({
-            url: 'https://1.tongji.edu.cn/api/electionservice/student/elect',
+            url: chrome.runtime.getManifest().server+'/api/electionservice/student/elect',
             type: 'post',
             contentType: "application/json; charset=utf-8",
 
@@ -172,7 +172,7 @@ function doElect(){
 
 function checkElect(){
 	supstatus='e';
-	$.ajax({url:'https://1.tongji.edu.cn/api/electionservice/student/'+round+'/electRes',type:'post',data:{},dataType:'json',timeout:3000,success:function(res){
+	$.ajax({url:chrome.runtime.getManifest().server+'/api/electionservice/student/'+round+'/electRes',type:'post',data:{},dataType:'json',timeout:3000,success:function(res){
 		if (res.data.status!='Ready') {
 			setTimeout(checkElect,100);
 			return;
