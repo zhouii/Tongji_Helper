@@ -37,6 +37,15 @@ async function getStorage(key,default_value){
 		});
 	});
 }
+async function setStorage(key,value){
+	return new Promise((resolve,reject)=>{
+		var pair={};
+		pair[key]=value;
+		chrome.storage.local.set(pair,()=> {
+			resolve();
+		});
+	});
+}
 function myalert(tip,onhidden) {
 	$('#myalert').find('p').html(tip);
 	$('#myalert').modal('show');
