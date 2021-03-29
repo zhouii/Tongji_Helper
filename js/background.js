@@ -172,7 +172,7 @@ function doElect(){
 
 function checkElect(){
 	supstatus='e';
-	$.ajax({url:chrome.runtime.getManifest().server+'/api/electionservice/student/'+round+'/electRes',type:'post',data:{},dataType:'json',timeout:3000,success:function(res){
+	$.ajax({url:chrome.runtime.getManifest().server+'/api/electionservice/student/'+round+'/electRes',type:'post',data:{},dataType:'json',timeout:3000,success:async function(res){
 		if (res.data.status!='Ready') {
 			setTimeout(checkElect,100);
 			return;
@@ -180,17 +180,17 @@ function checkElect(){
 		c1=[];
 		for (success of res.data.successCourses) {
 			var isDeleted=false;
-                for (id in sup) {
-                    if (sup[id].delete.teachClassId === success) {
-                        sup[id].delete.finish=1;
-                        isDeleted=true;
-                    }
-                }
-                if(!isDeleted){
-			sup[success].finish=1;
-			c1.push(sup[success]);
+			for (id in sup) {
+				if (sup[id].delete.teachClassId === success) {
+					sup[id].delete.finish=1;
+					isDeleted=true;
+				}
+			}
+			if(!isDeleted){
+				sup[success].finish=1;
+				c1.push(sup[success]);
+			}
 		}
-	}
 		if (res.data.successCourses.length>0) {
 			chrome.tabs.query({},function(result){
 				for (r in result) {
@@ -210,9 +210,7 @@ function checkElect(){
 			chrome.notifications.create('elect_finish',{'type':'basic','iconUrl':'img/icon48.png','title':'辅助完成!','message':'所需辅助选课的课程已全部选课成功！','buttons':[{'title':'查看详情'}],'requireInteraction':true});
 		} else {
 			supstatus='w';
-			chrome.storage.local.get(['interval'],function (items) {
-				setTimeout(doElect,lastelect+items['interval']-Date.now());
-			});
+			setTimeout(doElect,lastelect+await getStorage('interval',1500)-Date.now());
 		}
 		updateElectPage();
 	},error:function(xhr){onElectError(xhr,checkElect);}});

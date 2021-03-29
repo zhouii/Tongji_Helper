@@ -29,6 +29,14 @@ function getCookie(name){
 	if(r!=null) return unescape(r[2]);
 	return null;
 }
+async function getStorage(key,default_value){
+	return new Promise((resolve,reject)=>{
+		chrome.storage.local.get([key],items=> {
+			if (items[key]==undefined) resolve(default_value);
+			else resolve(items[key]);
+		});
+	});
+}
 function myalert(tip,onhidden) {
 	$('#myalert').find('p').html(tip);
 	$('#myalert').modal('show');
