@@ -76,3 +76,5 @@ Date.prototype.format = function(fmt) {
 	}
 	return fmt; 
 }
+var server="https://1.tongji.edu.cn";
+//var server="http://122.112.219.67:30669";

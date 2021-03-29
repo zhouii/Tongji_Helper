@@ -62,14 +62,6 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
 	}
 
-	if (window.location.href=="http://yiliao.tongji.edu.cn/" || window.location.href=="http://yiliao.tongji.edu.cn/default.aspx") {//医疗报销系统
-		$('#TxtLogin').val(items['username']==null?"":items['username']);
-		$('#TxtPwd').val(items['password']==null?"":items['password']);
-		$('#txtcode').val(getCookie('tjloginverify'));
-		$('#BtnLogin').click();
-		$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');
-	}
-
 	if (window.location.href=="http://itongjis.tongji.edu.cn/Home/Public/login") {//itongjis
 		$('input.sub').click();
 		$('body').html('<h1 align="center">Tongji Helper 正在为您自动登录…</h1>');

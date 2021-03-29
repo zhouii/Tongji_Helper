@@ -36,7 +36,7 @@
 							<tr v-for="mail in mails">
 								<td><input type="text" class="form-control" v-model="mail.name" /></td>
 								<td><input type="text" class="form-control" v-model="mail.mail" /></td>
-								<td><input type="password" class="form-control" v-model="mail.pswd" /></td>
+								<td><input type="text" class="form-control" v-model="mail.pswd" /></td>
 								<td><input type="text" class="form-control" v-model="mail.hmwk" /></td>
 								<td><input type="text" class="form-control" v-model="mail.memo" /></td>
 								<td><button type="button" class="btn btn-danger" @click="deleteMail($index)">删除</button></td>
