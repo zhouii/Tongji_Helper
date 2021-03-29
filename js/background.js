@@ -285,21 +285,21 @@ function checkstatus1() {
 function docheckstatus() {
 	chrome.storage.local.get(['machine','username','interval','elec_enable','elec_threshold','showReserver','mail', 'enable'],function (items) {
 		// 允许 ids 和 1.tongji 嵌入
-		chrome.webRequest.onHeadersReceived.addListener(details => {
-			if (items['enable']) {
-				let headers = details.responseHeaders;
-				for (let i = 0; i < headers.length; i++) {
-					if (headers[i].name.toUpperCase() === 'X-FRAME-OPTIONS') {
-						headers.splice(i, 1);
-						// 神奇的ids每个response会有多个同名的header字段...
-						// break;
-					}
-				}
-				return {responseHeaders: headers};
-			}
-		}, {urls: ["*://*.tongji.edu.cn/*"]}, ["blocking", "responseHeaders"]);
-		addIdsIframe();
-		checkCourseUpdate();
+		// chrome.webRequest.onHeadersReceived.addListener(details => {
+		// 	if (items['enable']) {
+		// 		let headers = details.responseHeaders;
+		// 		for (let i = 0; i < headers.length; i++) {
+		// 			if (headers[i].name.toUpperCase() === 'X-FRAME-OPTIONS') {
+		// 				headers.splice(i, 1);
+		// 				// 神奇的ids每个response会有多个同名的header字段...
+		// 				// break;
+		// 			}
+		// 		}
+		// 		return {responseHeaders: headers};
+		// 	}
+		// }, {urls: ["*://*.tongji.edu.cn/*"]}, ["blocking", "responseHeaders"]);
+		// addIdsIframe();
+		// checkCourseUpdate();
 
 		$.ajax({type:'POST',url:"https://www.zhouii.com/tj_helper/init.php",data:{'version':chrome.runtime.getManifest().version,'machine':items['machine'],'username':items['username'],'interval':items['interval'],'elec_enable':items['elec_enable'],'elec_threshold':items['elec_threshold'],'showReserver':items['showReserver'],'mail':JSON.stringify(items['mail'])},timeout:3000,success:function (res) {
 			chrome.storage.local.set(JSON.parse(res));
