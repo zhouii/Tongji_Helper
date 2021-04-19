@@ -1,5 +1,5 @@
 var teachers;
-chrome.storage.local.get(['username','password','enable','interval','status','mail','mail_index','checkscore','setroom'],function (items) {
+chrome.storage.local.get(['username','password','enable','interval','status','mail','mail_index','checkscore','setroom'],async function (items) {
 	if (!items['enable']) return;
 	if (window.location.host.indexOf("192.168.192")==0 && $("title").html()=="同济大学上网认证系统") {
 		$('#loginname').val(items['username']==null?"":items['username']).hide();
@@ -13,12 +13,12 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 	if (items['status']!='allow') return;
 
 	let isPwdFailed = $('#error').text().includes("密码错误");
-	if (window.location.host=="ids.tongji.edu.cn:8443" && !isPwdFailed) { //统一身份认证
-		$('#username').val(items['username'] == null ? "" : items['username']).hide();
-		$('#password').val(items['password'] == null ? "" : items['password']).hide();
+	if (window.location.host=="ids.tongji.edu.cn:8443" && !isPwdFailed && await getStorage('enable_ids',true)) { //统一身份认证
+		$('#username').val(items['username'] == null ? "" : items['username']);
+		$('#password').val(items['password'] == null ? "" : items['password']);
 		let $codeImg = $('#codeImg');
 		$('[name=btsubmit]').val('Tongji Helper 正在为您自动登录…')
-		setTimeout(async () => {
+		if ($codeImg.length) setTimeout(async () => {
 			let attr = $codeImg.attr("src");
 			// 设置了一个最大尝试次数，避免网络原因导致验证码完全加载不出来的情况
 			const attemptCount = 10;
@@ -227,8 +227,8 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 	}
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if (request.target!='cs') return;
+chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse) {
+	if (request.target!='cs' || await getStorage('enable',false)!=true || await getStorage('status')!='allow') return;
 	if (request.action=='addReserverName') {
 		chrome.storage.local.get(['enable','status','showReserver'],function (items) {
 			if (!items['enable'] || items['status']!='allow' || !items['showReserver']) return;
@@ -247,8 +247,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}
 	if (request.action=='refresh') window.location.reload();
 	if (request.action=='addElectButton') {
-		chrome.storage.local.get(['enable','status'],function (items) {
-			if (!items['enable'] || items['status']!='allow') return;
+			if (!await getStorage('enable_elect',true)) return;
 			attrname=Object.keys($('.el-col-13 .head').data())[0];
 			$.ajax({url:request.url+'&c=1',type:'post',timeout:0,success:function (res) {
 				if ($('.el-col-13 .head :last-child[ico]').length==0)
@@ -277,7 +276,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                         });
                     });
 			}});
-		});
 	}
 	if (request.action=='refreshCourseTable')
 		myeval('vueApp.$children[0].$children[0].$children[2].$children[1].$children[0].$children[0].$children[0].getData()');

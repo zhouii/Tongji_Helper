@@ -3,7 +3,7 @@
 
   "name": "Tongji Helper",
   "description": "能自动登录同济的各种网站，还有邮箱登录、选课辅助、评教辅助、电费提醒等功能(⊙v⊙)~",
-  "version": "2.1.1",
+  "version": "2.1.2",
 
   "browser_action": {
     "default_icon": "img/icon.png",
