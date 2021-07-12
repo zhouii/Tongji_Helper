@@ -139,6 +139,16 @@ chrome.storage.local.get(['username','password','enable','interval','status','ma
 		}
 	}
 
+	if (window.location.host=="1.tongji.edu.cn") {
+		setTimeout(async () => {
+			let clearButton = '<button type="button" class="el-button el-button--default el-button--small el-button--primary" ' +
+				'id="tj-helper-force-close"><span>强制关闭</span></button>';
+			$('div.el-message-box__btns').children(':button')
+				.before(clearButton);
+			$('#tj-helper-force-close').on("click", clearForcedDivs);
+		}, 500);
+	}
+
 	if ((window.location.href.includes('http://202.120.163.129:88/buyRecord') || window.location.href.includes('http://202.120.163.129:88/usedRecord'))&&items['setroom']) {
 		var room=/<h6>.*?(\d*)\s*?剩余/.exec($('html').html())[1];
 		chrome.storage.local.set({room:room,setroom:0});
@@ -283,6 +293,12 @@ chrome.runtime.onMessage.addListener(async function(request, sender, sendRespons
 
 if (window.location.host=="xuanke.tongji.edu.cn" && window.location.href.indexOf("o.jsp")>0) chrome.runtime.sendMessage({'target':'bg','sh':$('td[nowrap]').html()});
 if (window.location.host=="4m3.tongji.edu.cn" && window.location.href.indexOf("electionP")>0) chrome.runtime.sendMessage({'target':'bg','sh':$('[id^="s"]').html()});
+
+// 清除强制执行任务相关的内容
+function clearForcedDivs() {
+	$('div.v-modal').remove();
+	$('div.el-message-box__wrapper').remove();
+}
 
 function refre() {
 	$('table').after('<h2 align="center" style="padding:50px">Tongji Helper 正在刷新…</h2>');
